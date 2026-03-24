@@ -1,0 +1,10 @@
+include ~/.config/kitty/kitty-colors.conf
+include ~/.config/kitty/$KITTY_OS.conf
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="JetBrains Mono"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS

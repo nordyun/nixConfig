@@ -10,4 +10,8 @@
     source = ./linuxbin;
     recursive = true;
   };
+  home.file.".config/kitty" = lib.mkIf pkgs.stdenv.isLinux {
+    source = ./common/kitty;
+    recursive = true;
+  };
 }
