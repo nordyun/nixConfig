@@ -20,6 +20,8 @@ in
       "kodi"
       "calibre"
       "kitty"
+      "wezterm"
+      "font-jetbrains-mono"
     ];
   };
 

@@ -32,6 +32,7 @@
       llm-agents.codex-acp
       llm-agents.gemini-cli
       jq
+      gh
     ];
 
     home.shellAliases = {

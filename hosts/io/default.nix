@@ -44,15 +44,10 @@ in
     "supabase"
     "xcodegen"
   ];
-  homebrew.casks = [
-    "nikitabobko/tap/aerospace"
-    "wezterm"
-    "font-jetbrains-mono"
-    # "kodi"
-    # "calibre"
-    # "android-platform-tools"
-    # "hammerspoon"
-  ];
+  # casks moved to workstation.nix
+  # homebrew.casks = [
+  #   # "hammerspoon"
+  # ];
 
 
   services.sketchybar = {

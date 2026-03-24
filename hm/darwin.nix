@@ -19,7 +19,7 @@
     stow
     openssh
     mas
-    gh
+
     #    pyenv            #only in unstable, hm problems, moved to system
     #    jq               #don't think i need this
     #    youtube-dl
