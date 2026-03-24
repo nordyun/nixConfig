@@ -5,7 +5,7 @@
     wash = {
       name = "wash";
       home = "/Users/wash";
-      openssh.authorizedKeys.keyFiles = [ myLib.albertmcteKeys ];
+      openssh.authorizedKeys.keyFiles = [ myLib.nordyunKeys ];
       shell = pkgs.fish;
     };
   };

@@ -77,7 +77,7 @@
         lfs.enable = true;
         settings = {
           commit.gpgSign = false;
-          user.name = "Nordyun";
+          user.name = "nordyun";
           user.email = "njorthson@proton.me";
           pull.ff = "only";
         };

@@ -37,7 +37,7 @@
         "wheel"
         "networkmanager"
       ];
-      openssh.authorizedKeys.keyFiles = [ myLib.albertmcteKeys ];
+      openssh.authorizedKeys.keyFiles = [ myLib.nordyunKeys ];
       hashedPasswordFile = config.age.secrets.wyattpw.path;
       shell = pkgs.fish;
       packages = with pkgs; [
