@@ -33,6 +33,7 @@
       llm-agents.gemini-cli
       jq
       gh
+      stow
     ];
 
     home.shellAliases = {

@@ -16,7 +16,6 @@
     nmap
     rclone
     rsync
-    stow
     openssh
     mas
 
