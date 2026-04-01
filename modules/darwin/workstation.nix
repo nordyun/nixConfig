@@ -22,6 +22,7 @@ in
       "kitty"
       "wezterm"
       "font-jetbrains-mono"
+      "tailscale-app"
     ];
   };
 

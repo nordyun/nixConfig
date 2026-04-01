@@ -100,23 +100,60 @@ in
           "server string" = "smbnix";
           "netbios name" = "smbnix";
           "security" = "user";
-          #"use sendfile" = "yes";
-          #"max protocol" = "smb2";
-          # note: localhost is the ipv6 localhost ::1
           "hosts allow" = "10.1.1. 127.0.0.1 localhost";
           "hosts deny" = "0.0.0.0/0";
           "guest account" = "nobody";
           "map to guest" = "bad user";
-          "ntlm auth" = "yes";
+          # Protocol - force SMB3
+          "server min protocol" = "SMB3";
+          "server max protocol" = "SMB3";
+          # macOs finder optimizations
+          "vfs objects" = "catia fruit streams_xattr";
+          "fruit:metadata" = "stream";
+          "fruit:model" = "MacSamba";
+          "fruit:posix_rename" = "yes";
+          "fruit:nfs_aces" = "no";
+          "fruit:veto_appledouble" = "no";
+          "fruit:wipe_intentionally_left_blank_rfork" = "yes";
+          "fruit:delete_empty_adfiles" = "yes";
+          # Performance
+          "aio read size" = "1";
+          "aio write size" = "1";
         };
-        "sambashare" = {
+        "music" = {
           "path" = "/mercury/music";
           "valid users" = "wash";
           "public" = "no";
           "browseable" = "yes";
           "read only" = "yes";
           "guest ok" = "no";
-          "allow guests" = "yes";
+          "force user" = "wash";
+        };
+        "photos" = {
+          "path" = "/mercury/photos";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "yes";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
+        "movies" = {
+          "path" = "/mercury/movies";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "yes";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
+        "homevids" = {
+          "path" = "/mercury/homevids";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "yes";
+          "guest ok" = "no";
           "force user" = "wash";
         };
       };

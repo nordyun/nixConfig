@@ -38,11 +38,13 @@ in
   homebrew.brews = [
     #        "cloudflared"
     "anomalyco/tap/opencode"
+    "dlvhdr/formulae/diffnav"
     "acsandmann/tap/rift"
     "ruby"
     "rustledger"
     "supabase"
     "xcodegen"
+    "coreutils"
   ];
   # casks moved to workstation.nix
   # homebrew.casks = [
