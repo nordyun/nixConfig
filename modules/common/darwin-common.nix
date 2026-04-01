@@ -11,6 +11,7 @@ in
   nix.package = pkgs.nixVersions.stable;
   nix.settings.cores = 0; # use all cores
   nix.settings.max-jobs = 10; # use all cores
+  environment.systemPath = [ "/opt/homebrew/bin" ];
   programs.fish.enable = true;
   system.primaryUser = config.hostVars.primaryUser;
   system.defaults = {

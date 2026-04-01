@@ -90,10 +90,10 @@
             ./hosts/io
           ];
         };
-        rhea = darwin.lib.darwinSystem {
+        anu = darwin.lib.darwinSystem {
           specialArgs = { inherit inputs outputs myLib; };
           modules = [
-            ./hosts/rhea
+            ./hosts/anu
           ];
         };
         saturn = darwin.lib.darwinSystem {
