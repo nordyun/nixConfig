@@ -25,6 +25,14 @@ in
       "tailscale-app"
     ];
   };
+  services.jankyborders = {
+    enable = true;
+    active_color = "gradient(top_left=0xffFF0000,bottom_right=0xff00FF00)";
+    inactive_color = "0xff101010";
+    hidpi = true;
+    width = 6.0;
+    # style = "round";
+  };
 
   # aerospace installed via homebrew for now — configure via ~/.aerospace.toml
   # TODO: move back to services.aerospace once config is dialed in
