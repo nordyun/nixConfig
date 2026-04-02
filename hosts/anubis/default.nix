@@ -92,15 +92,17 @@ in
     };
     samba = {
       enable = true;
+      nmbd.enable = false;
       #package = pkgs.samba4Full;
       openFirewall = true;
       settings = {
         global = {
           "workgroup" = "WORKGROUP";
           "server string" = "smbnix";
+          "disable netbios" = "yes";
           "netbios name" = "smbnix";
           "security" = "user";
-          "hosts allow" = "10.1.1. 127.0.0.1 localhost";
+          "hosts allow" = "10.1.1. 100. 127.0.0.1 localhost";
           "hosts deny" = "0.0.0.0/0";
           "guest account" = "nobody";
           "map to guest" = "bad user";
