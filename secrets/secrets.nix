@@ -61,4 +61,8 @@ in
     wash
     anubis
   ];
+  "letta-env.age".publicKeys = [
+    wash
+    anubis
+  ];
 }

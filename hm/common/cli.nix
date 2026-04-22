@@ -34,6 +34,7 @@
       jq
       gh
       stow
+      zoxide
     ];
 
     home.shellAliases = {

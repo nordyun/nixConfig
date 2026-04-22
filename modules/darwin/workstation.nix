@@ -23,6 +23,7 @@ in
       "wezterm"
       "font-jetbrains-mono"
       "tailscale-app"
+      "raycast"
     ];
   };
   services.jankyborders = {

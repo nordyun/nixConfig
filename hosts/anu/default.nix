@@ -18,6 +18,10 @@ in
   nixpkgs.config.android_sdk.accept_license = true;
   nixpkgs.overlays = [
     inputs.llm-agents.overlays.default
+    (final: prev: {
+      fish = unstable.fish;
+      fishPlugins = unstable.fishPlugins;
+    })
   ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
@@ -45,6 +49,7 @@ in
     "supabase"
     "xcodegen"
     "coreutils"
+    "poppler"
   ];
   # casks moved to workstation.nix
   # homebrew.casks = [
