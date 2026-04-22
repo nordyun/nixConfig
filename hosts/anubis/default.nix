@@ -159,6 +159,15 @@ in
           "guest ok" = "no";
           "force user" = "wash";
         };
+        "tv" = {
+          "path" = "/mercury/tv";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "yes";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
       };
     };
     mpd = {
