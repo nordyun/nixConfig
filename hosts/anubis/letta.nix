@@ -17,6 +17,7 @@
     environmentFiles = [ config.age.secrets.letta-env.path ];
     volumes = [
       "/mercury/letta/app:/root/.letta:rw"
+      "/mercury/letta/pgdata:/var/lib/postgresql/data:rw"
     ];
     ports = [
       "8283:8283/tcp"
