@@ -14,12 +14,22 @@ let
       command = "${lib.getExe pkgs.uv}";
       args = [ "run" "--directory" ticktickMcpDir "-m" "ticktick_mcp.cli" "run" ];
     };
+    letta = {
+      type = "stdio";
+      command = "npx";
+      args = [ "-y" "letta-mcp-server" ];
+      env = {
+        LETTA_BASE_URL = "http://anubis:8283";
+      };
+    };
   };
 
   mcpJson = builtins.toJSON { inherit mcpServers; };
 in
 {
   home.packages = [ pkgs.uv ];
+
+  age.secrets.letta-mcp-password.file = ../../secrets/letta-mcp-password.age;
 
   home.sessionVariables.UV_PYTHON_PREFERENCE = "only-system";
 
@@ -39,7 +49,10 @@ in
       echo '{}' > "$claude_json"
     fi
 
-    ${lib.getExe pkgs.jq} -s '.[0] * .[1]' \
+    letta_pw="$(cat "${config.age.secrets.letta-mcp-password.path}")"
+
+    ${lib.getExe pkgs.jq} -s --arg pw "$letta_pw" \
+      '.[0] * (.[1] | .mcpServers.letta.env.LETTA_PASSWORD = $pw)' \
       "$claude_json" \
       <(echo '${mcpJson}') \
       > "$claude_json.tmp" \

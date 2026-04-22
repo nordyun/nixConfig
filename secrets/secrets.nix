@@ -65,4 +65,7 @@ in
     wash
     anubis
   ];
+  "letta-mcp-password.age".publicKeys = [ 
+    wash 
+  ];
 }
