@@ -2,7 +2,12 @@
 {
   config = {
     # home.file.".config/kitty".source = ./kitty;
-    # move kitty to stow
+    # moved kitty to stow
+    home.file.".npmrc".text = ''
+      prefix=${config.home.homeDirectory}/.npm-global
+    '';
+    home.sessionPath = [ "${config.home.homeDirectory}/.npm-global/bin" ];
+
     home.packages = with pkgs; [
       bat
       curl
