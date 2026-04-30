@@ -30,7 +30,7 @@
     enable = true;
     settings = {
       interfaces-config = {
-        interfaces = [ "enp2s0" ];
+        interfaces = [ "enp2s0" "agents" ];
       };
       lease-database = {
         name = "/var/lib/kea/dhcp4.leases";
@@ -77,14 +77,43 @@
           #          ];
           id = 1;
         }
+        {
+          id = 20;
+          subnet = "10.1.20.0/24";
+          interface = "agents";
+          pools = [
+            {
+              pool = "10.1.20.10 - 10.1.20.200";
+            }
+          ];
+          option-data = [
+            {
+              name = "routers";
+              data = "10.1.20.1";
+            }
+            {
+              name = "domain-name-servers";
+              data = "10.1.20.1";
+              always-send = true;
+            }
+            {
+              name = "domain-name";
+              data = "agents.lan";
+            }
+          ];
+        }
       ];
     };
   };
   networking = {
     nat = {
       enable = true;
-      internalInterfaces = [ "enp2s0" ];
+      internalInterfaces = [ "enp2s0" "agents" ];
       externalInterface = "enp1s0";
+    };
+    vlans.agents = {
+      id = 20;
+      interface = "enp2s0";
     };
     interfaces = {
       enp1s0.useDHCP = true;
@@ -93,6 +122,15 @@
         ipv4.addresses = [
           {
             address = "10.1.1.1";
+            prefixLength = 24;
+          }
+        ];
+      };
+      agents = {
+        useDHCP = false;
+        ipv4.addresses = [
+          {
+            address = "10.1.20.1";
             prefixLength = 24;
           }
         ];
@@ -110,6 +148,16 @@
         31225
       ];
     };
+    # Fully-quarantined "agents" VLAN: only DNS + DHCP from neptune itself,
+    # no L3 reachability between agents <-> main LAN.
+    firewall.interfaces."agents" = {
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 67 ];
+    };
+    firewall.extraCommands = ''
+      iptables -I FORWARD -i agents -o enp2s0 -j DROP
+      iptables -I FORWARD -i enp2s0 -o agents -j DROP
+    '';
     dhcpcd = {
       runHook = ''
         if [[ $reason =~ BOUND ]]; then curl --silent --output /dev/null "$(cat ${config.age.secrets.nextdns_url.path})" && echo "Updated IP on $(date)" >> /home/wash/IPCanary.txt ; fi

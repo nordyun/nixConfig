@@ -7,6 +7,7 @@
         interface = [
           "127.0.0.1"
           "10.1.1.1"
+          "10.1.20.1"
         ];
         #        port = "5513";
         tls-system-cert = true;
@@ -14,6 +15,7 @@
           "0.0.0.0/0 refuse"
           "127.0.0.0/8 allow"
           "10.1.1.0/24 allow"
+          "10.1.20.0/24 allow"
         ];
 
         #        prefer-ip6 = true;

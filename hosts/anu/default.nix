@@ -50,7 +50,12 @@ in
     "xcodegen"
     "coreutils"
     "poppler"
+    "tag"
   ];
+  homebrew.casks = [
+    "wallspace"
+  ];
+
   # casks moved to workstation.nix
   # homebrew.casks = [
   #   # "hammerspoon"
