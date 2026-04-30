@@ -7,5 +7,6 @@
     ../../hm/hypr
     ../../hm/qt.nix
     ../../hm/music
+    ../../hm/agents.nix
   ];
 }

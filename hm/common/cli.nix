@@ -32,10 +32,6 @@
       rust-analyzer
       pyright
       btop
-      llm-agents.claude-code
-      llm-agents.codex
-      llm-agents.codex-acp
-      llm-agents.gemini-cli
       jq
       gh
       stow

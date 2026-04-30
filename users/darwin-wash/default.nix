@@ -25,6 +25,7 @@
     imports = [
       ../../hm
       ../../hm/darwin.nix
+      ../../hm/agents.nix
     ];
   };
 
