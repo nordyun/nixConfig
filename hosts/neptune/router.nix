@@ -157,6 +157,9 @@
     firewall.extraCommands = ''
       iptables -I FORWARD -i agents -o enp2s0 -j DROP
       iptables -I FORWARD -i enp2s0 -o agents -j DROP
+      # allowPing = true (NixOS default) accepts ICMP on every interface;
+      # explicitly drop ICMP from agents so the VLAN can't probe neptune itself.
+      iptables -I INPUT -i agents -p icmp -j DROP
     '';
     dhcpcd = {
       runHook = ''
