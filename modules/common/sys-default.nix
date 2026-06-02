@@ -44,6 +44,7 @@ in
     lzop
     mbuffer
     nixfmt-rfc-style
+    kitty
   ];
 
   programs = {

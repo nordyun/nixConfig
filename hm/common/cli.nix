@@ -59,9 +59,9 @@
     #    age.secrets.miniIp.file = ../../secrets/miniIp.age;
 
     programs = {
-      kitty = {
-        enable = pkgs.stdenv.isLinux; #macos install via homebrew for notifications
-      };
+      # kitty = {
+        # enable = pkgs.stdenv.isLinux; #macos install via homebrew for notifications
+      # };
       bat = {
         enable = true;
         # config.theme = "Dracula";
