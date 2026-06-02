@@ -30,7 +30,7 @@ in
     finder.FXEnableExtensionChangeWarning = false;
     loginwindow.GuestEnabled = false;
     screencapture.disable-shadow = true;
-    screencapture.location = "${config.hostVars.homeDirectory}/Dropbox/Screenshots/2026/";
+    screencapture.location = "${config.hostVars.homeDirectory}/Dropbox/Screenshots/";
   };
   environment.systemPackages = [
     unstable.lua5_5
