@@ -16,14 +16,21 @@
   wayland.windowManager.hyprland = {
     enable = true;
     configType = "hyprlang";
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     xwayland = {
       enable = true;
     };
     systemd.enable = false;
     plugins = [
-      inputs.hyprexpo.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
+      (pkgs.hyprlandPlugins.mkHyprlandPlugin {
+        pluginName = "hyprtasking";
+        version = "0-unstable-2026-08-30";
+        src = inputs.hyprtasking;
+        nativeBuildInputs = [ pkgs.meson pkgs.ninja ];
+        # meson.build asks for pixman-1 explicitly; the rest come from
+        # hyprland.buildInputs via mkHyprlandPlugin.
+        buildInputs = [ pkgs.pixman ];
+        meta.description = "Workspace management plugin for Hyprland";
+      })
     ];
     settings = {
       exec-once = [

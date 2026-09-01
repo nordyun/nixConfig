@@ -56,7 +56,7 @@ in
       "$modifier,0,workspace,10"
       "$modifier SHIFT,SPACE,movetoworkspace,special"
       "$modifier,SPACE,togglespecialworkspace"
-      "$modifier,Tab,hyprexpo:expo,toggle"
+      "$modifier,Tab,hyprtasking:toggle,cursor"
       "$modifier SHIFT,1,movetoworkspace,1"
       "$modifier SHIFT,2,movetoworkspace,2"
       "$modifier SHIFT,3,movetoworkspace,3"
@@ -82,7 +82,7 @@ in
       ",XF86AudioPrev, exec, playerctl previous"
       ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
       ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
-      ",CONTROL_L&ALT_L&Tab,hyprexpo:expo,toggle"
+      ",CONTROL_L&ALT_L&Tab,hyprtasking:toggle,all"
     ];
 
     bindm = [

@@ -7,14 +7,12 @@
     impermanence.url = "github:nix-community/impermanence";
     firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
-    hyprexpo = {
-      url = "github:sandwichfarm/hyprexpo";
-      inputs.hyprland.follows = "hyprland";
+    # Hyprland itself comes from nixpkgs (cached). hyprtasking is built against
+    # pkgs.hyprland via pkgs.hyprlandPlugins.mkHyprlandPlugin, so we only need
+    # its source here.
+    hyprtasking = {
+      url = "github:raybbian/hyprtasking";
+      flake = false;
     };
     hyprwm-contrib = {
       url = "github:hyprwm/contrib";

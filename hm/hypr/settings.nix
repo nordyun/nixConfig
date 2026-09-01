@@ -42,11 +42,14 @@
     };
 
     plugin = {
-      hyprexpo = {
-        columns = 3;
-        gaps_in = 5;
-        bg_col = "rgb(111111)";
-        workspace_method = "center current";
+      hyprtasking = {
+        layout = "grid";
+        gap_size = 5;
+        bg_color = "0xff111111";
+        grid = {
+          rows = 3;
+          cols = 3;
+        };
       };
     };
   };
