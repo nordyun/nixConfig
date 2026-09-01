@@ -1,7 +1,4 @@
-{ pkgs, inputs, myLib, ... }:
-let
-  unstable = myLib.mkUnstable pkgs;
-in
+{ pkgs, inputs, ... }:
 {
   imports = [
     ../../modules/common/darwin-common.nix
@@ -16,13 +13,6 @@ in
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.android_sdk.accept_license = true;
-  nixpkgs.overlays = [
-    inputs.llm-agents.overlays.default
-    (final: prev: {
-      fish = unstable.fish;
-      fishPlugins = unstable.fishPlugins;
-    })
-  ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
@@ -54,6 +44,7 @@ in
   ];
   homebrew.casks = [
     "wallspace"
+    "termius"
   ];
 
   # casks moved to workstation.nix

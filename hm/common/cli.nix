@@ -15,7 +15,7 @@
       file
       fzf
       git
-      neofetch
+      fastfetch
       ripgrep
       unzip
       pv
