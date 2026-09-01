@@ -14,10 +14,6 @@ in
   home-manager.useGlobalPkgs = true;
   home-manager.extraSpecialArgs = { inherit inputs; };
   # home-manager.useUserPackages = true;
-  nixpkgs.overlays = [
-    inputs.llm-agents.overlays.default
-  ];
-
   # Possibly just use 'nixos-install --no-root-passwd'
   users.users.root.hashedPassword = "!";
 

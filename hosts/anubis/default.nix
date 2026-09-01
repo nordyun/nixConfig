@@ -172,42 +172,46 @@ in
     };
     mpd = {
       enable = true;
-      musicDirectory = "/mercury/music";
-      extraConfig = ''
-        audio_output {
-          type           "alsa"
-          name           "Bitperfect (Direct)"
-          device         "hw:0,0"
-          auto_resample  "no"
-          auto_channels  "no"
-          auto_format    "no"
-          dop            "no"
-          buffer_time    "200000"
-          period_time    "50000"
-          enabled        "yes"
-        }
-        audio_output {
-          type           "alsa"
-          name           "CamillaDSP EQ"
-          device         "camilladsp"
-          auto_resample  "no"
-          auto_channels  "no"
-          auto_format    "no"
-          buffer_time    "200000"
-          period_time    "50000"
-          enabled        "no"
-        }
-        audio_output {
-          type           "fifo"
-          name           "my_fifo"
-          path           "/tmp/mpd.fifo"
-          format         "44100:16:2"
-        }
-        resampler {
-          plugin         "soxr"
-          quality        "very high"
-        }
-        '';
+      settings = {
+        music_directory = "/mercury/music";
+        audio_output = [
+          {
+            type = "alsa";
+            name = "Bitperfect (Direct)";
+            device = "hw:0,0";
+            auto_resample = "no";
+            auto_channels = "no";
+            auto_format = "no";
+            dop = "no";
+            buffer_time = "200000";
+            period_time = "50000";
+            enabled = "yes";
+          }
+          {
+            type = "alsa";
+            name = "CamillaDSP EQ";
+            device = "camilladsp";
+            auto_resample = "no";
+            auto_channels = "no";
+            auto_format = "no";
+            buffer_time = "200000";
+            period_time = "50000";
+            enabled = "no";
+          }
+          {
+            type = "fifo";
+            name = "my_fifo";
+            path = "/tmp/mpd.fifo";
+            format = "44100:16:2";
+          }
+        ];
+        resampler = [
+          {
+            plugin = "soxr";
+            quality = "very high";
+          }
+        ];
+      };
     };
   };
 

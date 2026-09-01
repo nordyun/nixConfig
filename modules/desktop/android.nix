@@ -10,15 +10,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # ADB + udev rules + adbusers group
-    programs.adb.enable = true;
 
     # User groups for USB debugging and KVM emulator acceleration
-    users.users.${primaryUser}.extraGroups = [ "adbusers" "kvm" ];
+    users.users.${primaryUser}.extraGroups = [ "kvm" ];
 
     environment.systemPackages = with pkgs; [
       (unstable.android-studio.override { forceWayland = true; })
       jdk17
+      android-tools
     ];
 
     # Point ANDROID_HOME to Studio's default SDK download location

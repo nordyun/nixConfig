@@ -15,15 +15,16 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang";
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
     xwayland = {
       enable = true;
     };
     systemd.enable = false;
-    # plugins = [
-    #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
-    # ];
+    plugins = [
+      inputs.hyprexpo.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
+    ];
     settings = {
       exec-once = [
         # "dbus-update-activation-environment --all --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"

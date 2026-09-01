@@ -12,6 +12,10 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+    hyprexpo = {
+      url = "github:sandwichfarm/hyprexpo";
+      inputs.hyprland.follows = "hyprland";
+    };
     hyprwm-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";

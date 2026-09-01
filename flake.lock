@@ -461,6 +461,31 @@
         "type": "github"
       }
     },
+    "hyprexpo": {
+      "inputs": {
+        "hyprland": [
+          "hyprland"
+        ],
+        "nixpkgs": [
+          "hyprexpo",
+          "hyprland",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788002533,
+        "narHash": "sha256-6978jO4COJNXFcoHLlWzOTKUz6RjkRrJ31rFecJWp10=",
+        "owner": "sandwichfarm",
+        "repo": "hyprexpo",
+        "rev": "21077e4a9c1f4c62d2750fc634c4b41c0c792396",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sandwichfarm",
+        "repo": "hyprexpo",
+        "type": "github"
+      }
+    },
     "hyprgraphics": {
       "inputs": {
         "hyprutils": [
@@ -831,11 +856,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1788211684,
-        "narHash": "sha256-AFwhd1Nbhrjfb+86gBd9LkGdf/QPhVr3aT+aJ0+64XA=",
+        "lastModified": 1788225587,
+        "narHash": "sha256-aBbnOXun6q0ry9jUiCUmZmMuJIfv30SL6nbSyaTVWOc=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "dff3cd07fb741e3d4bab2ed5f018420900b69a2f",
+        "rev": "ea1dc2132fb2669899dc8b3cbe6fe82ed10d23d6",
         "type": "github"
       },
       "original": {
@@ -994,6 +1019,7 @@
         "eww": "eww",
         "firefox-addons": "firefox-addons",
         "home-manager": "home-manager_2",
+        "hyprexpo": "hyprexpo",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
         "hyprwm-contrib": "hyprwm-contrib",
