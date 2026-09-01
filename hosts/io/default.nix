@@ -16,9 +16,6 @@ in
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.android_sdk.accept_license = true;
-  nixpkgs.overlays = [
-    inputs.llm-agents.overlays.default
-  ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 

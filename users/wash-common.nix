@@ -39,6 +39,7 @@
     shell = pkgs.fish;
   };
 
+  home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.sharedModules = [
     inputs.agenix.homeManagerModules.default
   ];
