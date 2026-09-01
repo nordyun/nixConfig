@@ -23,7 +23,7 @@
     plugins = [
       (pkgs.hyprlandPlugins.mkHyprlandPlugin {
         pluginName = "hyprtasking";
-        version = "0-unstable-2026-08-30";
+        version = "0-unstable-2026-06-28";
         src = inputs.hyprtasking;
         nativeBuildInputs = [ pkgs.meson pkgs.ninja ];
         # meson.build asks for pixman-1 explicitly; the rest come from

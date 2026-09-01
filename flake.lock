@@ -386,16 +386,17 @@
     "hyprtasking": {
       "flake": false,
       "locked": {
-        "lastModified": 1788122585,
-        "narHash": "sha256-3C5YdLaUx4LgmPyVyfYqHB24ZDsrfI87veA3eDQIofM=",
+        "lastModified": 1782607986,
+        "narHash": "sha256-7CvSvTEk6rAX/K56QoPbWe7tr+9KGBAugXYJGc6eOEg=",
         "owner": "raybbian",
         "repo": "hyprtasking",
-        "rev": "4d3c39511c3f38966abf1ec4393f5a7220ffb1a3",
+        "rev": "765575445ce34989575a99f304d0b279e6a980b6",
         "type": "github"
       },
       "original": {
         "owner": "raybbian",
         "repo": "hyprtasking",
+        "rev": "765575445ce34989575a99f304d0b279e6a980b6",
         "type": "github"
       }
     },

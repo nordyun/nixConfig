@@ -9,9 +9,10 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     # Hyprland itself comes from nixpkgs (cached). hyprtasking is built against
     # pkgs.hyprland via pkgs.hyprlandPlugins.mkHyprlandPlugin, so we only need
-    # its source here.
+    # its source here. Pinned to the revision hyprpm.toml maps to Hyprland
+    # v0.55.4 (nixpkgs 26.05); bump when nixpkgs bumps Hyprland.
     hyprtasking = {
-      url = "github:raybbian/hyprtasking";
+      url = "github:raybbian/hyprtasking/765575445ce34989575a99f304d0b279e6a980b6";
       flake = false;
     };
     hyprwm-contrib = {
