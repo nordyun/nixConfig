@@ -24,7 +24,7 @@ in
       "$modifier,M,exec,pavucontrol"
       "$modifier,Q,killactive,"
       "$modifier SHIFT,P,pseudo,"
-      "$modifier SHIFT,I,togglesplit,"
+      "$modifier SHIFT,I,layoutmsg,togglesplit"
       "$modifier,F,fullscreen,"
       "$modifier SHIFT,F,togglefloating,"
       "$modifier SHIFT,C,exit,"

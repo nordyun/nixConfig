@@ -18,8 +18,9 @@
       };
     };
 
+    "$modifier" = "SUPER";
+
     general = {
-      "$modifier" = "SUPER";
       layout = "dwindle";
       gaps_in = 6;
       gaps_out = 8;
@@ -37,7 +38,6 @@
     };
 
     dwindle = {
-      pseudotile = true;
       preserve_split = true;
     };
 
