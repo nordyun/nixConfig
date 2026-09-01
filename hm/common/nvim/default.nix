@@ -7,6 +7,8 @@
 
   programs.neovim = {
     enable = true;
+    withRuby = true;
+    withPython3 = true;
     extraPackages = with pkgs; [
       tree-sitter
       gcc
@@ -36,7 +38,7 @@
         # vim-fugitive
         fzf-vim
         lualine-nvim
-        fzfWrapper
+        fzf-wrapper
         # vim-devicons
         # toggleterm-nvim
         copilot-lua

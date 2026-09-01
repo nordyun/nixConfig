@@ -22,7 +22,7 @@
     eza
     pyenv
     iina
-    nixfmt-rfc-style
+    nixfmt
     jdk17
   ];
 
