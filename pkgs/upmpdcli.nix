@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       's|#!/usr/bin/python3|#!${pythonEnv}/bin/python3|g' {} \;
   '';
 
+  passthru = { inherit pythonEnv; };
+
   meta = with lib; {
     description = "UPnP Media Renderer front-end for MPD";
     homepage = "https://www.lesbonscomptes.com/upmpdcli/";

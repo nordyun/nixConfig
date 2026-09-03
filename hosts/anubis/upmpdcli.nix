@@ -56,7 +56,9 @@ in
     wants = [ "mpd.service" ];
     wantedBy = [ "multi-user.target" ];
 
-    path = [ pkgs.openssl ];
+    # openssl: OHCredentials RSA key generation
+    # pythonEnv: OHRadio looks for `python3` on PATH; radio_scripts need `requests`
+    path = [ pkgs.openssl upmpdcli.pythonEnv ];
 
     serviceConfig = {
       Type = "simple";
