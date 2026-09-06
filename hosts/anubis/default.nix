@@ -60,9 +60,8 @@ in
   services.smartd = {
     enable = true;
     autodetect = true;
-    notifications.pushover.enable = false;
     notifications.mail.enable = false;
-    nitifications.wall.enable = true;
+    notifications.wall.enable = true;
   };
 
   virtualisation = {

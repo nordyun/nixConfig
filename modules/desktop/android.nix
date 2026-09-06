@@ -38,8 +38,8 @@ in
       libgcc
       ncurses5
       stdenv.cc.cc
-      xorg.libX11
-      xorg.libXrender
+      libX11
+      libXrender
       freetype
       fontconfig
     ];
