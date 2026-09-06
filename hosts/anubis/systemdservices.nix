@@ -70,6 +70,7 @@
       ExecStart = "${pkgs.rsync}/bin/rsync -a /mercury/alpha/Obsidian/N_Prime/Library/Media/Flights/ /home/wash/n8n-files/trips/";
     };
   };
+  systemd.services.jellyfin.environment.HOME = "/var/cache/jellyfin";
 
   age.secrets.pushover_user.file = ../../secrets/pushover_user.age;
   age.secrets.pushover_token.file = ../../secrets/pushover_token.age;

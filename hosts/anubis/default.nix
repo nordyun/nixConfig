@@ -57,6 +57,13 @@ in
     enable = true;
     interval = "monthly";
   };
+  services.smartd = {
+    enable = true;
+    autodetect = true;
+    notifications.pushover.enable = false;
+    notifications.mail.enable = false;
+    nitifications.wall.enable = true;
+  };
 
   virtualisation = {
     containers.enable = true;

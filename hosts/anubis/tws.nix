@@ -32,20 +32,20 @@ let
         freetype
 
         # X11
-        xorg.libX11
-        xorg.libXext
-        xorg.libXrender
-        xorg.libXtst
-        xorg.libXi
-        xorg.libXft
-        xorg.libXcursor
-        xorg.libXrandr
-        xorg.libXfixes
-        xorg.libxcb
-        xorg.libXScrnSaver
-        xorg.libXdamage
-        xorg.libXcomposite
-        xorg.libxshmfence
+        libX11
+        libXext
+        libXrender
+        libXtst
+        libXi
+        libXft
+        libXcursor
+        libXrandr
+        libXfixes
+        libxcb
+        libXScrnSaver
+        libXdamage
+        libXcomposite
+        libxshmfence
         libxkbcommon
 
         # bundled Chromium engine (JxBrowser) used by TWS news / account panels

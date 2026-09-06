@@ -14,6 +14,7 @@
       "/etc/NetworkManager"
       "/var/log"
       "/var/lib"
+      "/var/cache/jellyfin"
     ];
     files = [
       "/etc/machine-id"
