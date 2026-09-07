@@ -1,66 +1,31 @@
 -- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
-require('nvim-treesitter.configs').setup {
+-- nvim-treesitter `main` branch (nixpkgs >= 2026-04): the old
+-- `require('nvim-treesitter.configs').setup{}` module was removed.
+-- Grammars are supplied by nix (`nvim-treesitter.withAllGrammars`), so there is
+-- nothing to install here -- we just turn on highlighting + indentation per buffer.
 
-  highlight = { enable = true },
-  indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
-    },
-  },
-  textobjects = {
-    select = {
-      enable = false,
-      lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ['aa'] = '@parameter.outer',
-        ['ia'] = '@parameter.inner',
-        -- ['aF'] = '@function.outer',
-        -- ['iF'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = '@class.inner',
-        ['ii'] = '@conditional.inner',
-        ['ai'] = '@conditional.outer',
-        -- ['il'] = '@loop.inner',
-        -- ['al'] = '@loop.outer',
-        ['at'] = '@comment.outer',
-      },
-    },
-    move = {
-      enable = false,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        [']f'] = '@function.outer',
-        [']]'] = '@class.outer',
-      },
-      goto_next_end = {
-        [']F'] = '@function.outer',
-        [']['] = '@class.outer',
-      },
-      goto_previous_start = {
-        ['[f'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-      goto_previous_end = {
-        ['[F'] = '@function.outer',
-        ['[]'] = '@class.outer',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
-      },
-    },
-  },
-}
+local ok, ts = pcall(require, 'nvim-treesitter')
+if ok and ts.setup then
+  ts.setup {}
+end
 
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('treesitter_setup', { clear = true }),
+  callback = function(args)
+    local buf = args.buf
+    local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+    if not lang or not vim.treesitter.language.add(lang) then
+      return
+    end
+
+    -- highlighting
+    pcall(vim.treesitter.start, buf, lang)
+
+    -- indentation (experimental in the new branch, but matches the old `indent`)
+    vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
+
+-- NOTE: `incremental_selection` and `textobjects` are no longer part of
+-- nvim-treesitter itself on the `main` branch. If you want them back, add the
+-- `nvim-treesitter-textobjects` plugin (main branch) and configure it here.
