@@ -10,6 +10,12 @@ let
   neptune = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHGaDdqPC3F7hfYYU4b181GxcLkAZyTBAWHJ23hUWiI3";
   zelda = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQ/40iaZdCUOK24lAyPmyt1SJVaLKGQK50FZCm5Mzbt";
   nixmacVM = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4dWVZcNnAXGKgF0ZlzGCIkD93pODqU05qH7RzhPIWv";
+  # TODO(thoth): after install, add thoth's host key here (from
+  # /etc/ssh/ssh_host_ed25519_key.pub on thoth), add `thoth` to `systems`
+  # below and to the per-secret lists it needs (tailscale_key, washpw,
+  # syncoidKey, syncoidConf, syncoidKH, pushover_user, pushover_token),
+  # then run `agenix -r`.
+  # thoth = "ssh-ed25519 AAAA... thoth";
   systems = [
     anubis
     neptune

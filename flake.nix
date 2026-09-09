@@ -23,10 +23,6 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    eww = {
-      url = "github:elkowar/eww";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     agenix-rekey = {
       url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -67,6 +63,12 @@
             ./hosts/anubis
           ];
         };
+        thoth = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs myLib; };
+          modules = [
+            ./hosts/thoth
+          ];
+        };
         neptune = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs myLib; };
           modules = [
@@ -79,20 +81,8 @@
             ./hosts/zelda
           ];
         };
-        nixmacVM = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs myLib; };
-          modules = [
-            ./hosts/nixmacVM
-          ];
-        };
       };
       darwinConfigurations = {
-        io = darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs outputs myLib; };
-          modules = [
-            ./hosts/io
-          ];
-        };
         anu = darwin.lib.darwinSystem {
           specialArgs = { inherit inputs outputs myLib; };
           modules = [
