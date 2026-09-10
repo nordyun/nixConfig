@@ -108,4 +108,10 @@ in
     wash
     horus
   ];
+  # netclient password for neptune/thoth to monitor horus's upsd (add thoth when installed)
+  "nut_remote_pw.age".publicKeys = [
+    wash
+    horus
+    neptune
+  ];
 }

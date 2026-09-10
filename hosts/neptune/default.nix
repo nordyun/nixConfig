@@ -8,6 +8,7 @@
     ./unbound.nix
     ./tailscale.nix
     ./monit.nix
+    ./nut.nix
     ../../modules/common
     ../../users/wash
     ../../modules/server

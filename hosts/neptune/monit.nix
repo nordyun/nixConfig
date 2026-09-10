@@ -12,5 +12,6 @@
     unbound.matching = "unbound";
     kea-dhcp4-server.matching = "kea-dhcp4";
     tailscaled.matching = "tailscaled";
+    upsmon.matching = "upsmon";
   };
 }
