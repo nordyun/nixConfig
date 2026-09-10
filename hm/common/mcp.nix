@@ -1,18 +1,11 @@
 { pkgs, lib, config, ... }:
 
 let
-  ticktickMcpDir = "${config.home.homeDirectory}/.local/share/ticktick-mcp";
-
   mcpServers = {
     context7 = {
       type = "stdio";
       command = "npx";
       args = [ "-y" "@upstash/context7-mcp" ];
-    };
-    ticktick = {
-      type = "stdio";
-      command = "${lib.getExe pkgs.uv}";
-      args = [ "run" "--directory" ticktickMcpDir "-m" "ticktick_mcp.cli" "run" ];
     };
     letta = {
       type = "stdio";
@@ -27,22 +20,9 @@ let
   mcpJson = builtins.toJSON { inherit mcpServers; };
 in
 {
-  home.packages = [ pkgs.uv ];
-
   age.secrets.letta-mcp-password.file = ../../secrets/letta-mcp-password.age;
 
-  home.sessionVariables.UV_PYTHON_PREFERENCE = "only-system";
-
-  home.activation.ticktickMcpRepo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    export UV_PYTHON_PREFERENCE=only-system
-    if [ ! -d "${ticktickMcpDir}" ]; then
-      ${lib.getExe pkgs.git} clone https://github.com/jacepark12/ticktick-mcp.git "${ticktickMcpDir}"
-      ${lib.getExe pkgs.uv} venv "${ticktickMcpDir}/.venv"
-      ${lib.getExe pkgs.uv} pip install --python "${ticktickMcpDir}/.venv/bin/python" -e "${ticktickMcpDir}"
-    fi
-  '';
-
-  home.activation.claudeMcpServers = lib.hm.dag.entryAfter [ "writeBoundary" "ticktickMcpRepo" ] ''
+  home.activation.claudeMcpServers = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     claude_json="$HOME/.claude.json"
 
     if [ ! -f "$claude_json" ]; then
