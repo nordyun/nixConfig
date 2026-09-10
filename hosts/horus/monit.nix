@@ -1,7 +1,8 @@
-# monit agent for horus. Standalone until the local M/Monit collector exists
-# (Phase 1: add ./mmonit.nix, then set myMonit.collector.enable = true and grow
-# myMonit.processes to cover mmonit / mariadbd / phpfpm-librenms / nginx /
-# uptime-kuma / healthchecks / homepage-dashboard / upsd / upsmon / snmpd).
+# monit agent for horus.
+#
+# collector.enable stays false until the M/Monit collector (./mmonit.nix) is up
+# and secrets/monit_collector.age is filled in — then flip it here and on
+# neptune/anubis in one deploy.
 { ... }:
 {
   imports = [
@@ -9,7 +10,10 @@
     ../../modules/monit.nix
   ];
 
+  # myMonit.collector.enable = true;
+
   myMonit.processes = {
     tailscaled.matching = "tailscaled";
+    mmonit.matching = "bin/mmonit";
   };
 }

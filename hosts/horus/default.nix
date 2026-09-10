@@ -8,6 +8,7 @@
     ./hardware-configuration.nix
     ./tailscale.nix
     ./monit.nix
+    ./mmonit.nix
     ../../modules/common
     ../../users/wash
   ];
