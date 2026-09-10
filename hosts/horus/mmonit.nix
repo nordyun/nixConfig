@@ -45,6 +45,16 @@ let
       cp -a "$src/conf/." "$state/conf/"
     fi
 
+    # Add a second connector (127.0.0.1:8081) that knows it sits behind the
+    # tailscale-serve HTTPS proxy, so M/Monit's GUI Origin/CSRF checks and
+    # generated URLs match what the browser sees. The stock :8080 connector
+    # stays for the monit agents, which connect directly. Idempotent.
+    if ! ${lib.getExe pkgs.gnugrep} -q 'proxyName="horus.taila3fef.ts.net"' "$state/conf/server.xml"; then
+      ${lib.getExe pkgs.gnused} -i \
+        's#<Connector address="\*" port="8080"[^/]*/>#&\n    <Connector address="127.0.0.1" port="8081" processors="10" proxyScheme="https" proxyName="horus.taila3fef.ts.net" proxyPort="8443" />#' \
+        "$state/conf/server.xml"
+    fi
+
     # install/refresh the license from agenix (if the secret exists)
     if [ -r ${config.age.secrets.mmonit_license.path} ]; then
       mkdir -p "$state/conf"
@@ -92,7 +102,7 @@ in
   };
 
   # :8080 = agent collector endpoint (agents POST here directly over the tailnet).
-  # The GUI is also on :8080; tailscale serve fronts it with HTTPS on :8443.
+  # :8081 = proxy-aware GUI connector (loopback); tailscale serve fronts it on :8443.
   networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 8080 ];
-  myTailscaleServe.mounts."8443" = "http://127.0.0.1:8080";
+  myTailscaleServe.mounts."8443" = "http://127.0.0.1:8081";
 }
