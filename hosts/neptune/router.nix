@@ -65,6 +65,13 @@
             }
           ];
           subnet = "10.1.1.0/24";
+          reservations = [
+            {
+              hw-address = "70:4F:57:58:4D:6A";
+              ip-address = "10.1.1.2";
+              hostname = "tp-link";
+            }
+          ];
           #          reservations = [
           #            {
           #              hw-address = mac-address;
