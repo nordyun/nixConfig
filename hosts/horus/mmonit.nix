@@ -4,7 +4,12 @@
 # the program dirs every start so package upgrades take effect, keeping db/ conf/
 # logs/ across restarts) and mmonit runs from there.
 #
-# First start fetches a 30-day trial license from mmonit.com:443 -> conf/license.xml.
+# On first start mmonit tries to fetch a 30-day trial license from mmonit.com:443;
+# if that fails it logs a URL to download one manually. Either way the license
+# lives in conf/license.xml — kept reproducible here via the mmonit_license
+# agenix secret, which the seed step installs on every start (falls back to
+# whatever is already in conf/ if the secret isn't present).
+#
 # GUI + collector endpoint on :8080 (tailnet only). Default login admin/swordfish
 # -> change it, then create/set the collector user's password to match
 # secrets/monit_collector.age.
@@ -39,6 +44,13 @@ let
       mkdir -p "$state/conf"
       cp -a "$src/conf/." "$state/conf/"
     fi
+
+    # install/refresh the license from agenix (if the secret exists)
+    if [ -r ${config.age.secrets.mmonit_license.path} ]; then
+      mkdir -p "$state/conf"
+      install -m 0600 ${config.age.secrets.mmonit_license.path} "$state/conf/license.xml"
+    fi
+
     chmod -R u+rwX "$state"
   '';
 
@@ -53,6 +65,11 @@ in
     home = "/var/lib/mmonit";
   };
   users.groups.mmonit = { };
+
+  age.secrets.mmonit_license = {
+    file = ../../secrets/mmonit_license.age;
+    owner = "mmonit";
+  };
 
   systemd.services.mmonit = {
     description = "M/Monit collector";

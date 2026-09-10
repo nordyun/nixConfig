@@ -109,6 +109,10 @@ in
       monit_collector.file = ../secrets/monit_collector.age;
     };
 
+    # M/Monit polls the agent's httpd for actions; reachable over the tailnet only.
+    networking.firewall.interfaces."tailscale0".allowedTCPPorts =
+      lib.mkIf cfg.collector.enable [ 2812 ];
+
     services.monit.enable = true;
     services.monit.config = ''
       set daemon 30

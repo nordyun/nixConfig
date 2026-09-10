@@ -100,4 +100,8 @@ in
     neptune
     horus
   ];
+  "mmonit_license.age".publicKeys = [
+    wash
+    horus
+  ];
 }

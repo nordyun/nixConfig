@@ -1,11 +1,12 @@
-# monit agent for neptune (router). Standalone for now — reports to the M/Monit
-# collector on horus once that host exists (set myMonit.collector.enable = true).
+# monit agent for neptune (router) — reports to the M/Monit collector on horus.
 { ... }:
 {
   imports = [
     ../../modules/notify.nix
     ../../modules/monit.nix
   ];
+
+  myMonit.collector.enable = true;
 
   myMonit.processes = {
     unbound.matching = "unbound";
