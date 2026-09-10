@@ -90,5 +90,5 @@ in
     dates = "monthly";
     options = "--delete-older-than 90d";
   };
-  nix.settings.auto-optimise.store = true;
+  nix.settings.auto-optimise-store = true;
 }
