@@ -11,7 +11,9 @@
     ./mmonit.nix
     ./nut.nix
     ./librenms.nix
+    ./observability.nix
     ../../modules/snmpd.nix
+    ../../modules/tailscale-serve.nix
     ../../modules/common
     ../../users/wash
   ];

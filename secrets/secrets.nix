@@ -123,4 +123,9 @@ in
     neptune
     anubis
   ];
+  # Django SECRET_KEY for healthchecks:  openssl rand -base64 48
+  "healthchecks_secret_key.age".publicKeys = [
+    wash
+    horus
+  ];
 }

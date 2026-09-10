@@ -91,6 +91,8 @@ in
     };
   };
 
-  # GUI + agent collector endpoint, tailnet only
+  # :8080 = agent collector endpoint (agents POST here directly over the tailnet).
+  # The GUI is also on :8080; tailscale serve fronts it with HTTPS on :8443.
   networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 8080 ];
+  myTailscaleServe.mounts."8443" = "http://127.0.0.1:8080";
 }
