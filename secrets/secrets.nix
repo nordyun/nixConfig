@@ -116,7 +116,7 @@ in
   ];
   # SNMP read-only community + allowed poller sources (two lines):
   #   rocommunity <random> 127.0.0.1
-  #   rocommunity <random> 100.86.167.115
+  #   rocommunity <random> 100.64.0.0/10   (whole tailnet range; community still required)
   "snmp_community.age".publicKeys = [
     wash
     horus

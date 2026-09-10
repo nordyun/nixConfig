@@ -71,6 +71,16 @@
               ip-address = "10.1.1.2";
               hostname = "tp-link";
             }
+            # {
+            #   hw-address = "";
+            #   ip-address = "10.1.1.3";
+            #   hostname = "thoth";
+            # }
+            {
+              hw-address = "40:b0:76:d9:d2:5c";
+              ip-address = "10.1.1.4";
+              hostname = "anubis";
+            }
           ];
           #          reservations = [
           #            {
