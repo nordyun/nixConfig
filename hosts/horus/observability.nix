@@ -6,7 +6,10 @@ let
   base = "https://horus.taila3fef.ts.net";
 in
 {
-  age.secrets.healthchecks_secret_key.file = ../../secrets/healthchecks_secret_key.age;
+  age.secrets.healthchecks_secret_key = {
+    file = ../../secrets/healthchecks_secret_key.age;
+    owner = "healthchecks";
+  };
 
   # --- Uptime Kuma :3001 -> serve :10443 ---
   services.uptime-kuma = {
@@ -59,7 +62,7 @@ in
   # on horus after the first deploy and tighten if needed.
   myMonit.processes = {
     uptime-kuma.matching = "uptime-kuma";
-    homepage-dashboard.matching = "homepage";
+    homepage-dashboard.matching = "next-server";
     healthchecks = {
       matching = "hc.wsgi";
       restart = false;
