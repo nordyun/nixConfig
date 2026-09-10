@@ -28,25 +28,24 @@ let
     text = ''
       sev="''${1:-info}"
       title="''${2:-notification}"
-      shift 2 2>/dev/null || shift $#
-      msg="$*"
+      msg="''${*:3}"
       host="$(uname -n)"
 
       alerts_hook=${config.age.secrets.slack_alerts_webhook.path}
       warnings_hook=${config.age.secrets.slack_warnings_webhook.path}
 
       case "$sev" in
-        alert|crit|critical) hook="$alerts_hook";   icon=":rotating_light:" ;;
-        warn|warning)        hook="$warnings_hook"; icon=":warning:" ;;
-        *)                   hook="$warnings_hook"; icon=":information_source:" ;;
+        alert | crit | critical) hook="$alerts_hook" ; icon=":rotating_light:" ;;
+        warn | warning)          hook="$warnings_hook" ; icon=":warning:" ;;
+        *)                       hook="$warnings_hook" ; icon=":information_source:" ;;
       esac
 
       if [ ! -s "$hook" ]; then
-        echo "notify: webhook secret '$hook' missing or empty -- would have sent [$sev] $title ($host): $msg" >&2
+        echo "notify: webhook secret $hook missing or empty; would have sent [$sev] $title ($host): $msg" >&2
         exit 0
       fi
 
-      text="$(printf '%s *%s*  ·  `%s`\n%s' "$icon" "$title" "$host" "$msg")"
+      text="$(printf '%s *%s* [%s]\n%s' "$icon" "$title" "$host" "$msg")"
       payload="$(jq -nc --arg t "$text" '{text: $t}')"
 
       if ! curl -fsS -m 10 --retry 2 -X POST \
