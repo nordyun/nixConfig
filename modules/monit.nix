@@ -9,7 +9,15 @@
 # When collector.enable is false (default) monit runs standalone: local checks +
 # auto-restart + Slack. When true, the full `set httpd` / `set mmonit` block is
 # pulled from the agenix secret `monit_collector` (kept out of the world-readable
-# /etc/monitrc).
+# /etc/monitrc). That secret's exact contents, same on every agent:
+#
+#   set mmonit http://monit:PASSWORD@<horus-tailnet-ip>:8080/collector
+#   set httpd port 2812
+#       use address 0.0.0.0
+#       allow localhost
+#       allow monit:PASSWORD
+#
+# (`allow read-only localhost` is NOT valid monit syntax.)
 {
   config,
   lib,
