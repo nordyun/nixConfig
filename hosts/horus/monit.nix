@@ -11,5 +11,8 @@
   myMonit.processes = {
     tailscaled.matching = "tailscaled";
     mmonit.matching = "bin/mmonit";
+    upsd.matching = "upsd";
+    upsmon.matching = "upsmon";
+    upsdrv.matching = "usbhid-ups";
   };
 }

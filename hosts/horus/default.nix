@@ -9,6 +9,7 @@
     ./tailscale.nix
     ./monit.nix
     ./mmonit.nix
+    ./nut.nix
     ../../modules/common
     ../../users/wash
   ];

@@ -104,4 +104,8 @@ in
     wash
     horus
   ];
+  "nut_upsmon_pw.age".publicKeys = [
+    wash
+    horus
+  ];
 }
