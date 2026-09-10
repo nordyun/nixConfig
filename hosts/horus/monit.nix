@@ -16,7 +16,8 @@
     upsdrv.matching = "usbhid-ups";
     snmpd.matching = "snmpd";
     mysql = {
-      matching = "mariadbd";
+      # NixOS invokes the `mysqld` compat name; alternation future-proofs it
+      matching = "bin/(mysqld|mariadbd)";
       restart = false;
     };
     phpfpm-librenms.matching = "phpfpm-librenms";
