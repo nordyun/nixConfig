@@ -7,6 +7,7 @@
     ./router.nix
     ./unbound.nix
     ./tailscale.nix
+    ./monit.nix
     ../../modules/common
     ../../users/wash
     ../../modules/server

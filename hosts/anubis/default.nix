@@ -11,6 +11,7 @@ in
     ./sanoid.nix
     ./syncoid.nix
     ./systemdservices.nix
+    ./monit.nix
     ./autologin.nix
     ./tailscale.nix
     ./upmpdcli.nix

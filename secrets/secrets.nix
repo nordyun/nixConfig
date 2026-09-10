@@ -10,6 +10,7 @@ let
   neptune = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHGaDdqPC3F7hfYYU4b181GxcLkAZyTBAWHJ23hUWiI3";
   zelda = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQ/40iaZdCUOK24lAyPmyt1SJVaLKGQK50FZCm5Mzbt";
   nixmacVM = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4dWVZcNnAXGKgF0ZlzGCIkD93pODqU05qH7RzhPIWv";
+  horus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHBnWNrkuuvLlGjJJBJ0VxXTbm+8t40UxEqWQCGk3fFm";
   # TODO(thoth): after install, add thoth's host key here (from
   # /etc/ssh/ssh_host_ed25519_key.pub on thoth), add `thoth` to `systems`
   # below and to the per-secret lists it needs (tailscale_key, washpw,
@@ -21,6 +22,7 @@ let
     neptune
     zelda
     nixmacVM
+    horus
   ];
 in
 {
@@ -71,7 +73,31 @@ in
     wash
     anubis
   ];
-  "letta-mcp-password.age".publicKeys = [ 
-    wash 
+  "letta-mcp-password.age".publicKeys = [
+    wash
+  ];
+
+  # --- monitoring (horus + thoth) ---
+  # Slack incoming-webhook URLs consumed by modules/notify.nix. `monit_collector`
+  # holds the full `set httpd` / `set mmonit` block for agents reporting to the
+  # M/Monit collector on horus (modules/monit.nix, collector.enable = true).
+  # TODO: add `thoth` to each list once its host key exists, then `agenix -r`.
+  "slack_alerts_webhook.age".publicKeys = [
+    wash
+    anubis
+    neptune
+    horus
+  ];
+  "slack_warnings_webhook.age".publicKeys = [
+    wash
+    anubis
+    neptune
+    horus
+  ];
+  "monit_collector.age".publicKeys = [
+    wash
+    anubis
+    neptune
+    horus
   ];
 }

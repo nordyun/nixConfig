@@ -75,10 +75,10 @@
             ./hosts/neptune
           ];
         };
-        zelda = nixpkgs.lib.nixosSystem {
+        horus = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs myLib; };
           modules = [
-            ./hosts/zelda
+            ./hosts/horus
           ];
         };
       };
@@ -87,12 +87,6 @@
           specialArgs = { inherit inputs outputs myLib; };
           modules = [
             ./hosts/anu
-          ];
-        };
-        saturn = darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs outputs myLib; };
-          modules = [
-            ./hosts/saturn
           ];
         };
       };
