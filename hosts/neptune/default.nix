@@ -9,6 +9,7 @@
     ./tailscale.nix
     ./monit.nix
     ./nut.nix
+    ../../modules/snmpd.nix
     ../../modules/common
     ../../users/wash
     ../../modules/server

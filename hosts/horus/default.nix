@@ -10,6 +10,8 @@
     ./monit.nix
     ./mmonit.nix
     ./nut.nix
+    ./librenms.nix
+    ../../modules/snmpd.nix
     ../../modules/common
     ../../users/wash
   ];

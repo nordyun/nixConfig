@@ -114,4 +114,13 @@ in
     horus
     neptune
   ];
+  # SNMP read-only community + allowed poller sources (two lines):
+  #   rocommunity <random> 127.0.0.1
+  #   rocommunity <random> 100.86.167.115
+  "snmp_community.age".publicKeys = [
+    wash
+    horus
+    neptune
+    anubis
+  ];
 }

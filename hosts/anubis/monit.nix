@@ -16,5 +16,6 @@
     mpd.matching = "mpd";
     samba-smbd.matching = "smbd";
     tailscaled.matching = "tailscaled";
+    snmpd.matching = "snmpd";
   };
 }

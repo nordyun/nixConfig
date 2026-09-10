@@ -14,5 +14,12 @@
     upsd.matching = "upsd";
     upsmon.matching = "upsmon";
     upsdrv.matching = "usbhid-ups";
+    snmpd.matching = "snmpd";
+    mysql = {
+      matching = "mariadbd";
+      restart = false;
+    };
+    phpfpm-librenms.matching = "phpfpm-librenms";
+    nginx.matching = "nginx: master";
   };
 }

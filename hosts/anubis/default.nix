@@ -12,6 +12,7 @@ in
     ./syncoid.nix
     ./systemdservices.nix
     ./monit.nix
+    ../../modules/snmpd.nix
     ./autologin.nix
     ./tailscale.nix
     ./upmpdcli.nix
