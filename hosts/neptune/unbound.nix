@@ -50,6 +50,10 @@
             # "8.8.4.4@853#dns.google"
           ];
         }
+        {
+          name = "taila3fef.ts.net.";
+          forward-addr = [ "100.100.100.100" ];
+        }
       ];
       remote-control.control-enable = false;
     };
