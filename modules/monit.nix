@@ -95,8 +95,13 @@ let
     : > "${smartHealthFailedFile}.tmp"
     fail=0
     for dev in $(${pkgs.smartmontools}/bin/smartctl --scan-open | ${pkgs.gawk}/bin/awk '{print $1}'); do
-      if ! ${pkgs.smartmontools}/bin/smartctl -H "$dev"; then
-        echo "smartctl -H reported a problem for $dev" >&2
+      # smartctl's exit code is a bitmask that includes attributes that were
+      # merely below threshold at some point in the past (e.g. a temperature
+      # blip) even when the drive is currently healthy - check the actual
+      # self-assessment text instead, or this fires forever on old history.
+      health=$(${pkgs.smartmontools}/bin/smartctl -H "$dev" 2>/dev/null | ${pkgs.gawk}/bin/awk -F': ' '/overall-health self-assessment test result/ {print $2}')
+      if [ "$health" != "PASSED" ]; then
+        echo "smartctl -H reported a problem for $dev (result: ''${health:-none})" >&2
         echo "$dev" >> "${smartHealthFailedFile}.tmp"
         fail=1
       fi
