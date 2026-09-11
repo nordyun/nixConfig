@@ -5,6 +5,7 @@ in
 {
   imports = [
     ../../modules/common
+    ../../modules/immich-oauth.nix
     ./hardware-configuration.nix
     ./impermanence.nix
     #    ./resilio.nix
@@ -75,16 +76,12 @@ in
     };
   };
 
-  # TEMP: immich 2.7.5 is EOL and flagged for CVE-2026-59258 / CVE-2026-82272.
-  # No fixed version exists on nixos-26.05; immich 3.x lands in 26.11.
-  # REMOVE this when upgrading to 26.11 (or when moving immich to unstable) and
-  # migrate to immich 3.x (Postgres schema migration - back up the DB first).
-  nixpkgs.config.permittedInsecurePackages = [ "immich-2.7.5" ];
-
   services = {
     lact.enable = true;
     immich = {
       enable = true;
+      # Keep server and machine learning on the supported release from unstable.
+      package = unstable.immich;
       port = 2283;
       host = "0.0.0.0";
       # mediaLocation = "/mercury/immich/upload";

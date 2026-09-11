@@ -1,5 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, myLib, ... }:
 let
+  unstable = myLib.mkUnstable pkgs;
   # The board has 3x Intel i225 NICs (igc driver). The real interface name is
   # not known until first boot - check `ip link` on thoth and update this.
   lanInterface = "enp1s0";
@@ -53,20 +54,24 @@ in
     };
   };
 
-  # TEMP: immich 2.7.5 is EOL and flagged for CVE-2026-59258 / CVE-2026-82272.
-  # No fixed version exists on nixos-26.05; immich 3.x lands in 26.11.
-  # REMOVE this when upgrading to 26.11 (or moving immich to unstable) and
-  # migrate to immich 3.x (Postgres schema migration - back up the DB first).
-  nixpkgs.config.permittedInsecurePackages = [ "immich-2.7.5" ];
-
   services = {
     immich = {
       enable = true;
+      # Keep server and machine learning on the supported release from unstable.
+      package = unstable.immich;
       port = 2283;
       host = "0.0.0.0";
-      # NOTE: mediaLocation defaults to /var/lib/immich (NOT on mercury).
-      # Decide where the immich library should live before importing data.
-      # mediaLocation = "/mercury/immich/upload";
+      # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
+      # and /var/lib/postgresql (database state) onto separate ZFS datasets.
+      # Tune each dataset for its workload: large media files vs PostgreSQL
+      # random I/O; review recordsize, compression and atime, and preserve
+      # synchronous-write durability for PostgreSQL (do not use sync=disabled).
+      # Keep the existing paths via dataset mountpoints and preserve ownership.
+      # Declare mounts before enabling services so they cannot write to the
+      # underlying root filesystem when the datasets are unavailable.
+      # Include BOTH datasets in snapshots/offsite backups; existing mercury
+      # external-library backups alone do not cover this application state.
+      # Restore with services stopped and the matching PostgreSQL major version.
       openFirewall = true;
     };
     jellyfin = {

@@ -77,6 +77,10 @@ in
     wash
   ];
 
+  # Google OAuth client secret only (not the downloaded JSON credentials).
+  # Add thoth's host key and rekey before migrating Immich there.
+  "immich_google_client_secret.age".publicKeys = [ wash anubis ];
+
   # --- monitoring (horus + thoth) ---
   # Slack incoming-webhook URLs consumed by modules/notify.nix. `monit_collector`
   # holds the full `set httpd` / `set mmonit` block for agents reporting to the
