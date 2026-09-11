@@ -26,19 +26,19 @@
       ${./rcloneOnedrive.sh}
       '';
   };
-  systemd.user.services.wayvnc = {
-    enable = true;
-    after = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    wantedBy = [ "graphical-session.target" ];
-    description = "Automatically start Wayvnc";
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = ''${pkgs.wayvnc}/bin/wayvnc 0.0.0.0 -o HDMI-A-1'';
-      Restart = "on-failure";
-      RestartSec = "5s";
-    };
-  };
+  # systemd.user.services.wayvnc = {
+  #   enable = true;
+  #   after = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   wantedBy = [ "graphical-session.target" ];
+  #   description = "Automatically start Wayvnc";
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     ExecStart = ''${pkgs.wayvnc}/bin/wayvnc 0.0.0.0 -o HDMI-A-1'';
+  #     Restart = "on-failure";
+  #     RestartSec = "5s";
+  #   };
+  # };
   # systemd.user.services.maestral = {
   #   Unit = {
   #     Description = "Maestral Dropbox client";

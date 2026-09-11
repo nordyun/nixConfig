@@ -116,11 +116,12 @@ After editing any: `agenix -r`, commit, push, redeploy the affected hosts.
   configured — the `EMAIL_HOST` warning on `createsuperuser` is expected.)
 
 The non-NixOS **Ubuntu server** on the tailnet runs stock `apt install monit`
-with `/etc/monit/conf.d/mmonit.conf` (legacy `monit_collector` block) and reports
-to the same M/Monit; its alerting goes through M/Monit's central config. It still
-needs a unique control password and the localhost/Horus source allowlist.
+with `/etc/monit/conf.d/mmonit.conf` and reports
+to the same M/Monit; its alerting goes through M/Monit's central config. Its
+unique control password and localhost/Horus source allowlist were deployed as
+part of audit finding 4.
 See [credential migration and deployment verification](monit-credential-migration.md);
-the repository changes are not yet verified on live hosts.
+the user confirmed full deployment, including Ubuntu, on 2026-09-11.
 
 ---
 

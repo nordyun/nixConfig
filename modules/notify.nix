@@ -48,9 +48,21 @@ let
       text="$(printf '%s *%s* [%s]\n%s' "$icon" "$title" "$host" "$msg")"
       payload="$(jq -nc --arg t "$text" '{text: $t}')"
 
-      if ! curl -fsS -m 10 --retry 2 -X POST \
+      webhook="$(cat "$hook")"
+      # Keep the URL a single literal curl-config value. Slack URLs do not
+      # contain whitespace, quotes or backslashes; reject malformed secrets.
+      case "$webhook" in
+        ""|*[[:space:]]*|*\"*|*\\*)
+          echo "notify: webhook secret has an invalid URL format" >&2
+          exit 0
+          ;;
+      esac
+
+      # Bash's builtin printf sends the secret over a pipe, never in argv.
+      if ! printf 'url = "%s"\n' "$webhook" |
+          curl --config - -fsS -m 10 --retry 2 -X POST \
             -H 'Content-type: application/json' \
-            --data "$payload" "$(cat "$hook")" >/dev/null; then
+            --data "$payload" >/dev/null; then
         echo "notify: POST to Slack failed for [$sev] $title" >&2
       fi
     '';

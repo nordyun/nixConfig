@@ -1,5 +1,8 @@
 # Monit credential separation — audit finding 4
 
+Status: user confirmed full deployment, including Ubuntu, on 2026-09-11.
+The steps below remain as a deployment and verification reference.
+
 The repository migration preserves remote service control. Agents use
 `monit_submission.age` solely to submit reports to Horus. Each agent has a unique
 `monit_control_<host>.age`, decryptable only by that host and wash. These contain
@@ -33,7 +36,7 @@ expose credentials registered there.
 
 ## Ubuntu and later Thoth migration
 
-The unmanaged Ubuntu agent still uses the old combined configuration. Give it a
+The Ubuntu migration was confirmed complete by the user. Its procedure: give it a
 unique agent-control password, retain the submission directive, and add the same
 localhost/Horus source allowlist to its `set httpd` block. Check with `monit -t`,
 reload, and verify registration and access as above. Store its credential through

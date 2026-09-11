@@ -5,7 +5,7 @@
     nemo
     _1password-gui
     swaynotificationcenter
-    wayvnc
+    # wayvnc
     maestral
     maestral-gui
     waytrogen
