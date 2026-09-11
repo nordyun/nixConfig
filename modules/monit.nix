@@ -84,16 +84,30 @@ let
         if status != 0 then exec "${mkExec "alert" "zpool ${pool} unhealthy" "zpool status -x ${pool} reported a problem on ${host} - check zpool status"}"
     '';
 
+  # /var/lib/monit is created by the tmpfiles rule below; smart-health writes
+  # the failing device list there each cycle so smart-health-alert (run by
+  # monit's `exec` on failure, which gets no arguments of its own) can name
+  # the actual device(s) in the Slack alert instead of a generic message.
+  smartHealthFailedFile = "/var/lib/monit/smart-health-failed";
+
   smartHealthScript = pkgs.writeShellScript "smart-health" ''
     set -o pipefail
+    : > "${smartHealthFailedFile}.tmp"
     fail=0
     for dev in $(${pkgs.smartmontools}/bin/smartctl --scan-open | ${pkgs.gawk}/bin/awk '{print $1}'); do
       if ! ${pkgs.smartmontools}/bin/smartctl -H "$dev"; then
         echo "smartctl -H reported a problem for $dev" >&2
+        echo "$dev" >> "${smartHealthFailedFile}.tmp"
         fail=1
       fi
     done
+    mv "${smartHealthFailedFile}.tmp" "${smartHealthFailedFile}"
     exit "$fail"
+  '';
+
+  smartHealthAlertScript = pkgs.writeShellScript "smart-health-alert" ''
+    devices="$(${pkgs.coreutils}/bin/tr '\n' ' ' < "${smartHealthFailedFile}" 2>/dev/null || true)"
+    exec /run/current-system/sw/bin/notify alert "SMART health check failed" "smartctl -H reported a problem on ${host} for: ''${devices:-an unknown device} - run smartctl -a <device>"
   '';
 in
 {
@@ -229,7 +243,7 @@ in
 
       ${lib.optionalString cfg.smartHealth.enable ''
         check program smart-health with path "${smartHealthScript}"
-          if status != 0 then exec "${mkExec "alert" "SMART health check failed" "smartctl -H reported a device health problem on ${host} - check smartctl -a"}"
+          if status != 0 then exec "${smartHealthAlertScript}"
       ''}
 
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList processCheck cfg.processes)}

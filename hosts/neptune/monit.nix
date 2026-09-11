@@ -7,6 +7,7 @@
   ];
 
   myMonit.collector.enable = true;
+  myMonit.smartHealth.enable = true;
 
   myMonit.processes = {
     unbound.matching = "unbound";

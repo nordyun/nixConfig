@@ -14,6 +14,7 @@ in
     ./sanoid.nix
     ./syncoid.nix
     ./systemdservices.nix
+    # ./monit.nix  # needs thoth's host key + slack webhook secrets, see monit.nix
     ./tailscale.nix
     ../../users/wash
     ../../modules/server

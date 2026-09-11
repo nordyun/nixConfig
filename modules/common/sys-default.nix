@@ -43,6 +43,7 @@ in
     mbuffer
     nixfmt
     kitty
+    smartmontools
   ];
 
   programs = {
