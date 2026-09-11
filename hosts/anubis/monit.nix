@@ -11,6 +11,16 @@
 
   myMonit.collector.enable = true;
 
+  # Root is tmpfs on anubis (impermanence) - the baseline `check filesystem /`
+  # doesn't watch anything that actually fills up. /persist holds real state;
+  # /mercury is the ZFS pool root backing photos/movies/music/tv/nfs/samba.
+  myMonit.extraFilesystems = {
+    persist = "/persist";
+    mercury = "/mercury";
+  };
+  myMonit.zpools = [ "mercury" ];
+  myMonit.smartHealth.enable = true;
+
   myMonit.processes = {
     jellyfin.matching = "jellyfin";
     mpd.matching = "mpd";
