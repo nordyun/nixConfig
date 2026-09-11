@@ -1,0 +1,15 @@
+// Active rules supplied by the user on 2026-09-10, before access hardening.
+// Inactive example comments omitted. This file is a reference, not deployed by Nix.
+{
+  "grants": [
+    { "src": ["*"], "dst": ["*"], "ip": ["*"] }
+  ],
+  "ssh": [
+    {
+      "action": "check",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:self"],
+      "users": ["autogroup:nonroot", "root"]
+    }
+  ]
+}

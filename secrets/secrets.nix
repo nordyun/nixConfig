@@ -104,6 +104,12 @@ in
     neptune
     horus
   ];
+  # Submission login cannot authenticate to the newly configured agent HTTPDs.
+  "monit_submission.age".publicKeys = [ wash anubis neptune horus ];
+  "monit_control_anubis.age".publicKeys = [ wash anubis ];
+  "monit_control_neptune.age".publicKeys = [ wash neptune ];
+  "monit_control_horus.age".publicKeys = [ wash horus ];
+  # Legacy monit_collector retained until the unmanaged Ubuntu agent migrates.
   "mmonit_license.age".publicKeys = [
     wash
     horus

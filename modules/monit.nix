@@ -6,18 +6,13 @@
 #   myMonit.collector.enable = true;   # report to M/Monit on horus (Phase 1+)
 #   myMonit.extraConfig = "...";       # raw monitrc appended verbatim
 #
-# When collector.enable is false (default) monit runs standalone: local checks +
-# auto-restart + Slack. When true, the full `set httpd` / `set mmonit` block is
-# pulled from the agenix secret `monit_collector` (kept out of the world-readable
-# /etc/monitrc). That secret's exact contents, same on every agent:
-#
-#   set mmonit http://monit:PASSWORD@<horus-tailnet-ip>:8080/collector
-#   set httpd port 2812
-#       use address 0.0.0.0
-#       allow localhost
-#       allow monit:PASSWORD
-#
-# (`allow read-only localhost` is NOT valid monit syntax.)
+# Collector submission and agent control use separate agenix secrets.
+# monit_submission contains only `set mmonit http://monit:PASSWORD@.../collector`.
+# monit_control_<host> contains a complete `set httpd` block, allowing localhost
+# and Horus (100.86.167.115), with a unique mmonit_<host>:PASSWORD login.
+# Each control secret is encrypted only to its host and the administrator.
+# Monit registers that host's control credentials with M/Monit automatically.
+# Keep both host allow entries AND password authentication: Monit requires both.
 {
   config,
   lib,
@@ -100,7 +95,7 @@ in
     collector.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Report to the M/Monit collector (config from the monit_collector secret).";
+      description = "Report to M/Monit using separate submission and per-host control secrets.";
     };
 
     extraConfig = lib.mkOption {
@@ -114,10 +109,11 @@ in
     systemd.tmpfiles.rules = [ "d /var/lib/monit 0700 root root -" ];
 
     age.secrets = lib.mkIf cfg.collector.enable {
-      monit_collector.file = ../secrets/monit_collector.age;
+      monit_submission.file = ../secrets/monit_submission.age;
+      monit_control.file = ../secrets + "/monit_control_${host}.age";
     };
 
-    # M/Monit polls the agent's httpd for actions; reachable over the tailnet only.
+    # Monit's own source allowlist restricts access even while tailscale0 is trusted.
     networking.firewall.interfaces."tailscale0".allowedTCPPorts =
       lib.mkIf cfg.collector.enable [ 2812 ];
 
@@ -132,7 +128,10 @@ in
 
       ${
         if cfg.collector.enable then
-          ''include /run/agenix/monit_collector''
+          ''
+            include ${config.age.secrets.monit_submission.path}
+            include ${config.age.secrets.monit_control.path}
+          ''
         else
           ''
             set httpd port 2812

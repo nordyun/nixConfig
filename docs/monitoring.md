@@ -35,7 +35,7 @@ MagicDNS suffix: `taila3fef.ts.net` · horus tailnet IP: `100.86.167.115`
 | File | Provides |
 |---|---|
 | `notify.nix` | `notify <alert\|warn\|info> <title> <msg>` command → Slack; declares `slack_{alerts,warnings}_webhook` secrets. Degrades silently if a webhook is missing. |
-| `monit.nix` | `services.monit` + option `myMonit.processes.<unit> = { matching; pidfile; restart; }`, `myMonit.collector.enable`, `myMonit.extraConfig`. Baseline `check system` + `check filesystem /`. Collector mode pulls `set httpd`/`set mmonit` from the `monit_collector` secret and opens `:2812` on `tailscale0`. |
+| `monit.nix` | `services.monit` + option `myMonit.processes.<unit> = { matching; pidfile; restart; }`, `myMonit.collector.enable`, `myMonit.extraConfig`. Baseline `check system` + `check filesystem /`. Collector mode uses `monit_submission` and per-host `monit_control_<host>` secrets. Port 2812 requires password authentication and a localhost/Horus source address. |
 | `snmpd.nix` | `services.snmpd`, static config + `includeFile /run/agenix/snmp_community`, `:161/udp` on `tailscale0`. |
 | `nut.nix` | Shared NUT: routes UPS events → `notify` (server only), runs `upsmon` as root. Server uses `upssched` with an `myNut.onBattGraceSeconds` (default 30) timer so a generator cutover doesn't page. |
 | `tailscale-serve.nix` | `myTailscaleServe.mounts."<port>" = "http://127.0.0.1:<n>"` → oneshot `tailscale-serve.service` runs `tailscale serve reset` then `tailscale serve --bg --yes --https <port> <target>` per mount. No `services.tailscale.serve` exists in nixpkgs 26.05. |
@@ -87,7 +87,9 @@ allows everything on the tailnet and the firewall default-drops the rest.
 | Secret | Recipients | Contents |
 |---|---|---|
 | `slack_alerts_webhook` / `slack_warnings_webhook` | wash, horus, anubis, neptune | one Slack incoming-webhook URL each |
-| `monit_collector` | wash, horus, anubis, neptune | `set mmonit http://monit:<pw>@100.86.167.115:8080/collector` + `set httpd port 2812 / use address 0.0.0.0 / allow localhost / allow monit:<pw>` — **alphanumeric password only** (monit's parser breaks on `! @ : / # %`) |
+| `monit_submission` | wash, horus, anubis, neptune | Only the existing `set mmonit` directive; submission login preserved. The current encrypted URL uses `horus.taila3fef.ts.net`. |
+| `monit_control_<host>` | wash and the named host only | Complete `set httpd` block, localhost/Horus allowlist, unique `mmonit_<host>` password. |
+| `monit_collector` | wash, horus, anubis, neptune | Legacy combined secret, retained temporarily for the unmanaged Ubuntu migration; no longer referenced by the NixOS module. |
 | `mmonit_license` | wash, horus | the M/Monit `license.xml` (grab from `/var/lib/mmonit/conf/license.xml`) |
 | `nut_upsmon_pw` | wash, horus | random alnum — horus-local upsd `upsmon` user |
 | `nut_remote_pw` | wash, horus, neptune | random alnum — netclient `upsmon-remote` user (add thoth later) |
@@ -114,8 +116,11 @@ After editing any: `agenix -r`, commit, push, redeploy the affected hosts.
   configured — the `EMAIL_HOST` warning on `createsuperuser` is expected.)
 
 The non-NixOS **Ubuntu server** on the tailnet runs stock `apt install monit`
-with `/etc/monit/conf.d/mmonit.conf` (same `monit_collector` block) and reports
-to the same M/Monit; its alerting goes through M/Monit's central config.
+with `/etc/monit/conf.d/mmonit.conf` (legacy `monit_collector` block) and reports
+to the same M/Monit; its alerting goes through M/Monit's central config. It still
+needs a unique control password and the localhost/Horus source allowlist.
+See [credential migration and deployment verification](monit-credential-migration.md);
+the repository changes are not yet verified on live hosts.
 
 ---
 
@@ -138,7 +143,10 @@ imports = [ ../../modules/notify.nix ../../modules/monit.nix ];
 myMonit.collector.enable = true;
 myMonit.processes = { some-unit.matching = "some-proc"; };
 ```
-Add the host to `slack_*` + `monit_collector` recipients, `agenix -r`.
+Add the host to `slack_*` + `monit_submission` recipients, `agenix -r`.
+Create `monit_control_<host>.age` with a unique password and the localhost/Horus
+allowlist, encrypted only to wash and the new host; declare its recipients in
+`secrets/secrets.nix` before enabling collector mode.
 **Verify process patterns** after deploy — NixOS process names surprise you
 (`mysqld` not `mariadbd`, `next-server` not `homepage`): `sudo monit procmatch "<pat>"`.
 
@@ -175,8 +183,9 @@ sudo monit monitor <name>
 - **monit `set mmonit` not `set monit`**; `allow read-only localhost` is invalid
   (use `allow localhost`); collector password must be alphanumeric.
 - **neptune has no MagicDNS** (local unbound owns `/etc/resolv.conf`). Fixed with
-  an unbound forward-zone `taila3fef.ts.net. → 100.100.100.100`. NUT and the
-  monit collector URL use the raw `100.86.167.115` anyway (safety paths).
+  an unbound forward-zone `taila3fef.ts.net. → 100.100.100.100`.
+  NUT uses the raw `100.86.167.115`; the current Monit submission URL uses
+  `horus.taila3fef.ts.net` and depends on that DNS forwarding.
 - **NixOS process names**: `mysqld` (not `mariadbd`), `next-server` (not
   `homepage`), gunicorn matched via `hc.wsgi`.
 - **`logrotate-checkconf` fails on the first nginx deploy** (log-dir race) — a

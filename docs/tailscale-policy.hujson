@@ -1,0 +1,124 @@
+// Restrictive target policy. NOT deployed by Nix.
+// Assign server tags and migrate family identities before using this policy.
+// Review unknown Kuma probe destinations; validate in Tailscale's policy editor.
+{
+  "groups": {
+    "group:admins": ["grady@washatka.net"],
+    "group:exit-home": ["mdwashatka@gmail.com"],
+    "group:exit-offsite": ["mgwashatka@gmail.com"]
+  },
+  "tagOwners": {
+    "tag:router": ["group:admins"],
+    "tag:backup": ["group:admins"],
+    "tag:monitor": ["group:admins"],
+    "tag:storage": ["group:admins"],
+    "tag:exit-home": ["group:admins"],
+    "tag:exit-offsite": ["group:admins"]
+  },
+  "hosts": {
+    "anubis": "100.89.187.60"
+  },
+  "grants": [
+    // All Grady-owned devices can initiate connections to all destinations.
+    // This includes any old family/Zelda nodes STILL enrolled under Grady.
+    { "src": ["group:admins"], "dst": ["*"], "ip": ["*"] },
+    { "src": ["group:admins"], "dst": ["autogroup:internet"], "ip": ["*"] },
+
+    // Family Internet access only, constrained to the chosen exit location.
+    {
+      "src": ["group:exit-home"],
+      "dst": ["autogroup:internet"],
+      "via": ["tag:exit-home"],
+      "ip": ["*"]
+    },
+    {
+      "src": ["group:exit-offsite"],
+      "dst": ["autogroup:internet"],
+      "via": ["tag:exit-offsite"],
+      "ip": ["*"]
+    },
+
+    // Monit submission and control. Anubis stays user-owned.
+    {
+      "src": ["tag:router", "tag:backup", "tag:monitor", "tag:storage", "anubis"],
+      "dst": ["tag:monitor"],
+      "ip": ["tcp:8080"]
+    },
+    {
+      "src": ["tag:monitor"],
+      "dst": ["tag:router", "tag:backup", "tag:monitor", "tag:storage", "anubis"],
+      "ip": ["tcp:2812"]
+    },
+    // SNMP on NixOS hosts only; Andromeda does not run SNMP.
+    {
+      "src": ["tag:monitor"],
+      "dst": ["tag:router", "tag:monitor", "tag:storage", "anubis"],
+      "ip": ["udp:161"]
+    },
+    // Local UPS clients. Do not grant this to the offsite backup server.
+    {
+      "src": ["tag:router", "tag:storage"],
+      "dst": ["tag:monitor"],
+      "ip": ["tcp:3493"]
+    },
+    // Andromeda initiates syncoid pulls; no reverse initiation grant needed.
+    {
+      "src": ["tag:backup"],
+      "dst": ["anubis", "tag:storage"],
+      "ip": ["tcp:31225"]
+    }
+  ],
+  // Preserve existing Tailscale SSH behavior. Network grants still apply.
+  // Ordinary OpenSSH on port 31225 is independent of this section.
+  "ssh": [
+    {
+      "action": "check",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:self"],
+      "users": ["autogroup:nonroot", "root"]
+    }
+  ],
+  // These test network reachability, not application authentication or via
+  // selection. Test allowed/denied exit-node choices on real family clients.
+  "tests": [
+    {
+      "src": "grady@washatka.net",
+      "proto": "tcp",
+      "accept": ["tag:router:31225", "tag:backup:31225", "tag:monitor:443", "anubis:31225", "10.1.1.1:443", "mdwashatka@gmail.com:22", "mgwashatka@gmail.com:22"]
+    },
+    {
+      "src": "mdwashatka@gmail.com",
+      "proto": "tcp",
+      "deny": ["tag:router:31225", "tag:backup:31225", "tag:monitor:443", "anubis:2283", "10.1.1.1:443", "10.1.1.4:445", "grady@washatka.net:22"]
+    },
+    {
+      "src": "mgwashatka@gmail.com",
+      "proto": "tcp",
+      "deny": ["tag:router:31225", "tag:backup:31225", "tag:monitor:443", "anubis:2283", "10.1.1.1:443", "10.1.1.4:445", "grady@washatka.net:22"]
+    },
+    {
+      "src": "tag:backup",
+      "proto": "tcp",
+      "accept": ["anubis:31225", "tag:monitor:8080"],
+      "deny": ["anubis:445", "tag:router:31225", "tag:monitor:3493"]
+    },
+    {
+      "src": "tag:monitor",
+      "proto": "tcp",
+      "accept": ["anubis:2812", "tag:backup:2812", "tag:router:2812"],
+      "deny": ["anubis:31225", "tag:backup:31225"]
+    },
+    {
+      "src": "tag:monitor",
+      "proto": "udp",
+      "accept": ["anubis:161", "tag:router:161"],
+      "deny": ["tag:backup:161"]
+    },
+    {
+      "src": "tag:router",
+      "proto": "tcp",
+      "accept": ["tag:monitor:8080", "tag:monitor:3493"],
+      "deny": ["anubis:31225"]
+    }
+  ]
+}

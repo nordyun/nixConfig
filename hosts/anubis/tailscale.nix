@@ -2,9 +2,10 @@
 {
   services.tailscale = {
     enable = true;
-    useRoutingFeatures = "both";
+    useRoutingFeatures = "client";
     authKeyFile = config.age.secrets.tailscale_key.path;
-    extraUpFlags = [ "--advertise-exit-node" ];
+    # Neptune is the home exit node. Clear the persisted advertisement too.
+    extraSetFlags = [ "--advertise-exit-node=false" ];
   };
 
   # Optional: ethtool GRO settings for improved performance

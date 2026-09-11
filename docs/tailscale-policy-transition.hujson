@@ -1,0 +1,67 @@
+// TEMPORARY identity transition: all devices still have unrestricted access.
+// Invite family users, then use this to define and assign server tags.
+// Replace with the tested restrictive policy after identity migration.
+{
+  "groups": {
+    "group:admins": [
+      "grady@washatka.net"
+    ],
+    "group:exit-home": [
+      "mdwashatka@gmail.com"
+    ],
+    "group:exit-offsite": [
+      "mgwashatka@gmail.com"
+    ]
+  },
+  "tagOwners": {
+    "tag:router": [
+      "group:admins"
+    ],
+    "tag:backup": [
+      "group:admins"
+    ],
+    "tag:monitor": [
+      "group:admins"
+    ],
+    "tag:storage": [
+      "group:admins"
+    ],
+    "tag:exit-home": [
+      "group:admins"
+    ],
+    "tag:exit-offsite": [
+      "group:admins"
+    ]
+  },
+  "hosts": {
+    "anubis": "100.89.187.60"
+  },
+  "grants": [
+    {
+      "src": [
+        "*"
+      ],
+      "dst": [
+        "*"
+      ],
+      "ip": [
+        "*"
+      ]
+    }
+  ],
+  "ssh": [
+    {
+      "action": "check",
+      "src": [
+        "autogroup:member"
+      ],
+      "dst": [
+        "autogroup:self"
+      ],
+      "users": [
+        "autogroup:nonroot",
+        "root"
+      ]
+    }
+  ]
+}
