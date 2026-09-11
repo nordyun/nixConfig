@@ -15,6 +15,6 @@
   # Standard user SSH keys (for nordyun)
   nordyunKeys = builtins.fetchurl {
     url = "https://github.com/nordyun.keys";
-    sha256 = "0nc1lp77z9mkls5sqprayngafvjccci9y5mpmkszqps42qvcyl5l";
+    sha256 = "07m39l23wv0ifxwcr0gsf1iv6sfz1msl6k96brxr253hfp71h18c";
   };
 }
