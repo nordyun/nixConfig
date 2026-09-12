@@ -1,103 +1,63 @@
-# PLACEHOLDER - regenerate on the real hardware during install:
-#
-#   nixos-generate-config --root /mnt --no-filesystems
-#
-# then reconcile the generated kernel modules here and fill in the real
-# by-uuid devices below. The impermanence layout (tmpfs root + btrfs subvols)
-# must be created by the installer to match `fileSystems` - see hosts/anubis
-# for the working model. Expected btrfs subvols on the root disk:
-#   ssh (-> /etc/ssh), home, nix, persist
-{
-  config,
-  lib,
-  modulesPath,
-  ...
-}:
+{ config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  imports =
+    [ (modulesPath + "/installer/scan/not-detected.nix")
+    ];
 
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "ahci"
-    "nvme"
-    "usbhid"
-    "usb_storage"
-    "sd_mod"
-    "sr_mod"
-  ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [
-    "kvm-intel"
-    "sg" # generic SCSI - makemkv/whipper used this on anubis; harmless to keep
-  ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
 
-  # tmpfs root (impermanence) - wiped every boot
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "size=3G"
-      "mode=755"
+  boot.loader.grub = {
+    enable = true;
+    zfsSupport = true;
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+
+    mirroredBoots = [
+      { devices = [ "nodev" ]; path = "/boot"; }
+      { devices = [ "nodev" ]; path = "/boot-secondary"; }
     ];
   };
 
-  # --- TODO: replace REPLACE-ME with the real root-disk UUID after install ---
-  fileSystems."/etc/ssh" = {
-    device = "/dev/disk/by-uuid/REPLACE-ME";
-    fsType = "btrfs";
-    options = [
-      "subvol=ssh"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/REPLACE-ME";
-    fsType = "btrfs";
-    options = [
-      "subvol=home"
-      "compress=zstd"
-      "noatime"
-    ];
-  };
+  fileSystems."/" =
+    { device = "rpool/root";
+      fsType = "zfs";
+    };
 
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/REPLACE-ME";
-    fsType = "btrfs";
-    options = [
-      "subvol=nix"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
+  fileSystems."/nix" =
+    { device = "rpool/nix";
+      fsType = "zfs";
+    };
 
-  fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/REPLACE-ME";
-    fsType = "btrfs";
-    options = [
-      "subvol=persist"
-      "compress=zstd"
-      "noatime"
-    ];
-    neededForBoot = true;
-  };
+  fileSystems."/var" =
+    { device = "rpool/var";
+      fsType = "zfs";
+    };
 
-  # --- TODO: replace with the real EFI System Partition UUID ---
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/REPLACE-ME";
-    fsType = "vfat";
-  };
+  fileSystems."/home" =
+    { device = "rpool/home";
+      fsType = "zfs";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/895B-FFD7";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" "nofail" ];
+    };
+
+  fileSystems."/boot-secondary" =
+    { device = "/dev/disk/by-uuid/87DA-50CB";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" "nofail" ];
+    };
 
   swapDevices = [ ];
-
-  networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

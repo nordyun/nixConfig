@@ -3,13 +3,12 @@ let
   unstable = myLib.mkUnstable pkgs;
   # The board has 3x Intel i225 NICs (igc driver). The real interface name is
   # not known until first boot - check `ip link` on thoth and update this.
-  lanInterface = "enp1s0";
+  lanInterface = "enp4s0";
 in
 {
   imports = [
     ../../modules/common
     ./hardware-configuration.nix
-    ./impermanence.nix
     ./hwaccel.nix
     ./sanoid.nix
     ./syncoid.nix
@@ -56,25 +55,25 @@ in
   };
 
   services = {
-    immich = {
-      enable = true;
-      # Keep server and machine learning on the supported release from unstable.
-      package = unstable.immich;
-      port = 2283;
-      host = "0.0.0.0";
-      # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
-      # and /var/lib/postgresql (database state) onto separate ZFS datasets.
-      # Tune each dataset for its workload: large media files vs PostgreSQL
-      # random I/O; review recordsize, compression and atime, and preserve
-      # synchronous-write durability for PostgreSQL (do not use sync=disabled).
-      # Keep the existing paths via dataset mountpoints and preserve ownership.
-      # Declare mounts before enabling services so they cannot write to the
-      # underlying root filesystem when the datasets are unavailable.
-      # Include BOTH datasets in snapshots/offsite backups; existing mercury
-      # external-library backups alone do not cover this application state.
-      # Restore with services stopped and the matching PostgreSQL major version.
-      openFirewall = true;
-    };
+#    immich = {
+#      enable = true;
+#      # Keep server and machine learning on the supported release from unstable.
+#      package = unstable.immich;
+#      port = 2283;
+#      host = "0.0.0.0";
+#      # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
+#      # and /var/lib/postgresql (database state) onto separate ZFS datasets.
+#      # Tune each dataset for its workload: large media files vs PostgreSQL
+#      # random I/O; review recordsize, compression and atime, and preserve
+#      # synchronous-write durability for PostgreSQL (do not use sync=disabled).
+#      # Keep the existing paths via dataset mountpoints and preserve ownership.
+#      # Declare mounts before enabling services so they cannot write to the
+#      # underlying root filesystem when the datasets are unavailable.
+#      # Include BOTH datasets in snapshots/offsite backups; existing mercury
+#      # external-library backups alone do not cover this application state.
+#      # Restore with services stopped and the matching PostgreSQL major version.
+#      openFirewall = true;
+#    };
     jellyfin = {
       enable = true;
       openFirewall = true;

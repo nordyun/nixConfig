@@ -72,7 +72,7 @@
               hostname = "tp-link";
             }
             # {
-            #   hw-address = "";
+            #   hw-address = "9c:6b:00:af:e9:f7";
             #   ip-address = "10.1.1.3";
             #   hostname = "thoth";
             # }

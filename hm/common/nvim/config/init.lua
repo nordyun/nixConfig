@@ -14,7 +14,7 @@ require('plugins.trouble')
 -- require('plugins.obsidian')
 -- require('plugins.harpoon')
 require('plugins.mini')
-require('plugins.copilot')
+-- require('plugins.copilot')
 require('plugins.rainbow-delimiters')
 -- Create an autocommand group for Markdown settings
 vim.api.nvim_create_augroup('MarkdownSettings', { clear = true })

@@ -41,7 +41,7 @@
         fzf-wrapper
         # vim-devicons
         # toggleterm-nvim
-        copilot-lua
+        # copilot-lua
         # new plugins testing
         twilight-nvim
         zen-mode-nvim
