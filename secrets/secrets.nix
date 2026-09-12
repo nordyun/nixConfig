@@ -11,8 +11,7 @@ let
   zelda = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQ/40iaZdCUOK24lAyPmyt1SJVaLKGQK50FZCm5Mzbt";
   nixmacVM = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL4dWVZcNnAXGKgF0ZlzGCIkD93pODqU05qH7RzhPIWv";
   horus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVkkDUut8az0TvR48sZCqoJVssvsw/Lu5ibSOsm3kQ0";
-  # TODO(thoth): after install, add thoth's host key here (from
-  # /etc/ssh/ssh_host_ed25519_key.pub on thoth), add `thoth` to `systems`
+  thoth = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJuLI5KeSGBt/+iUlf7LYeeu4PS7n/sfr9iewfLldnw9";
   # below and to the per-secret lists it needs (tailscale_key, washpw,
   # syncoidKey, syncoidConf, syncoidKH, pushover_user, pushover_token),
   # then run `agenix -r`.
@@ -23,6 +22,7 @@ let
     zelda
     nixmacVM
     horus
+    thoth
   ];
 in
 {
@@ -30,23 +30,26 @@ in
   "washpw.age".publicKeys = [ wash ] ++ systems;
   "wyattpw.age".publicKeys = users ++ systems;
   "miniIp.age".publicKeys = users ++ systems;
-  "syncoidKey.age".publicKeys = [ wash ] ++ [ anubis ];
-  "syncoidConf.age".publicKeys = [ wash ] ++ [ anubis ];
-  "syncoidKH.age".publicKeys = [ wash ] ++ [ anubis ];
+  "syncoidKey.age".publicKeys = [ wash ] ++ [ anubis ] ++ [ thoth ];
+  "syncoidConf.age".publicKeys = [ wash ] ++ [ anubis ] ++ [ thoth ];
+  "syncoidKH.age".publicKeys = [ wash ] ++ [ anubis ] ++ [ thoth ];
   "pushoverScript.age".publicKeys = [
     wash
     anubis
     neptune
+    thoth
   ];
   "pushover_user.age".publicKeys = [
     wash
     anubis
     neptune
+    thoth
   ];
   "pushover_token.age".publicKeys = [
     wash
     anubis
     neptune
+    thoth
   ];
   "atuinKey.age".publicKeys = [ wash ];
   "nextdns_url.age".publicKeys = [
@@ -64,14 +67,17 @@ in
   "qobuz_user.age".publicKeys = [
     wash
     anubis
+    thoth
   ];
   "qobuz_pass.age".publicKeys = [
     wash
     anubis
+    thoth
   ];
   "letta-env.age".publicKeys = [
     wash
     anubis
+    thoth
   ];
   "letta-mcp-password.age".publicKeys = [
     wash
@@ -79,7 +85,7 @@ in
 
   # Google OAuth client secret only (not the downloaded JSON credentials).
   # Add thoth's host key and rekey before migrating Immich there.
-  "immich_google_client_secret.age".publicKeys = [ wash anubis ];
+  "immich_google_client_secret.age".publicKeys = [ wash anubis thoth ];
 
   # --- monitoring (horus + thoth) ---
   # Slack incoming-webhook URLs consumed by modules/notify.nix. `monit_collector`
@@ -91,24 +97,28 @@ in
     anubis
     neptune
     horus
+    thoth
   ];
   "slack_warnings_webhook.age".publicKeys = [
     wash
     anubis
     neptune
     horus
+    thoth
   ];
   "monit_collector.age".publicKeys = [
     wash
     anubis
     neptune
     horus
+    thoth
   ];
   # Submission login cannot authenticate to the newly configured agent HTTPDs.
-  "monit_submission.age".publicKeys = [ wash anubis neptune horus ];
+  "monit_submission.age".publicKeys = [ wash anubis neptune horus thoth ];
   "monit_control_anubis.age".publicKeys = [ wash anubis ];
   "monit_control_neptune.age".publicKeys = [ wash neptune ];
   "monit_control_horus.age".publicKeys = [ wash horus ];
+  "monit_control_thoth.age".publicKeys = [ wash thoth ];
   # Legacy monit_collector retained until the unmanaged Ubuntu agent migrates.
   "mmonit_license.age".publicKeys = [
     wash
@@ -123,6 +133,7 @@ in
     wash
     horus
     neptune
+    thoth
   ];
   # SNMP read-only community + allowed poller sources (two lines):
   #   rocommunity <random> 127.0.0.1
@@ -132,6 +143,7 @@ in
     horus
     neptune
     anubis
+    thoth
   ];
   # Django SECRET_KEY for healthchecks:  openssl rand -base64 48
   "healthchecks_secret_key.age".publicKeys = [
