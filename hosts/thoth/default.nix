@@ -59,6 +59,7 @@ in
     ];
       RequiresMountsFor = [
       "/mercury/immich"
+      "/var/lib/immich"
     ];
     };
   };

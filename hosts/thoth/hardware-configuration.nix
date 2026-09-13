@@ -59,7 +59,9 @@
   fileSystems."/var/lib/immich" = {
     device = "/mercury/immich";
     fsType = "none";
-    options = [ "bind" ];
+    # Wait for native ZFS mounts so the bind uses the dataset, not the
+    # underlying directory on rpool/root. This adds Requires= and After=.
+    options = [ "bind" "x-systemd.requires=zfs-mount.service" ];
   };
 
   swapDevices = [ ];
