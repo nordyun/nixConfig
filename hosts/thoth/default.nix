@@ -12,6 +12,7 @@ in
     ./syncoid.nix
     ./systemdservices.nix
     ./monit.nix
+    ../../modules/snmpd.nix
     ./tailscale.nix
     ../../users/wash
     ../../modules/server
