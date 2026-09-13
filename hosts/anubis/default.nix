@@ -55,11 +55,10 @@ in
 
   #For ZFS support
   networking.hostId = "fd91c922";
-  boot.zfs.extraPools = [ "mercury" ];
-  services.zfs.autoScrub = {
-    enable = true;
-    interval = "monthly";
-  };
+  # services.zfs.autoScrub = {
+  #   enable = true;
+  #   interval = "monthly";
+  # };
   services.smartd = {
     enable = true;
     autodetect = true;
