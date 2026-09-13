@@ -1,8 +1,6 @@
 { pkgs, myLib, ... }:
 let
   unstable = myLib.mkUnstable pkgs;
-  # The board has 3x Intel i225 NICs (igc driver). The real interface name is
-  # not known until first boot - check `ip link` on thoth and update this.
   lanInterface = "enp4s0";
 in
 {
@@ -13,10 +11,11 @@ in
     ./sanoid.nix
     ./syncoid.nix
     ./systemdservices.nix
-    # ./monit.nix  # needs thoth's host key + slack webhook secrets, see monit.nix
+    ./monit.nix
     ./tailscale.nix
     ../../users/wash
     ../../modules/server
+    ../../modules/immich-oauth.nix
   ];
 
   networking = {
@@ -26,10 +25,6 @@ in
 
   time.timeZone = "America/New_York";
 
-  # --- ZFS: takes over the "mercury" pool moved from anubis ---
-  # First boot after attaching the disks: the pool still records anubis's
-  # hostid, so import once with:  zpool import -f mercury
-  # (ideally `zpool export mercury` on anubis before moving the drives).
   networking.hostId = "c0b08ea5";
   boot.zfs.extraPools = [ "mercury" ];
   services.zfs.autoScrub = {
@@ -54,26 +49,32 @@ in
     };
   };
 
+  systemd.services.immich-server = {
+    after = [ "zfs-mount.service" ];
+    requires = [ "zfs-mount.service" ];
+    unitConfig = {
+      ConditionPathIsMountPoint = [
+      "/mercury/immich"
+    ];
+      RequiresMountsFor = [
+      "/mercury/immich"
+    ];
+    };
+  };
+
   services = {
-#    immich = {
-#      enable = true;
-#      # Keep server and machine learning on the supported release from unstable.
-#      package = unstable.immich;
-#      port = 2283;
-#      host = "0.0.0.0";
-#      # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
-#      # and /var/lib/postgresql (database state) onto separate ZFS datasets.
-#      # Tune each dataset for its workload: large media files vs PostgreSQL
-#      # random I/O; review recordsize, compression and atime, and preserve
-#      # synchronous-write durability for PostgreSQL (do not use sync=disabled).
-#      # Keep the existing paths via dataset mountpoints and preserve ownership.
-#      # Declare mounts before enabling services so they cannot write to the
-#      # underlying root filesystem when the datasets are unavailable.
-#      # Include BOTH datasets in snapshots/offsite backups; existing mercury
-#      # external-library backups alone do not cover this application state.
-#      # Restore with services stopped and the matching PostgreSQL major version.
-#      openFirewall = true;
-#    };
+    immich = {
+      enable = true;
+      # mediaLocation = "/mercury/immich"; #can't do, bind mount due to immich bug
+      # Keep server and machine learning on the supported release from unstable.
+      package = unstable.immich;
+      port = 2283;
+      host = "0.0.0.0";
+     # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
+     # and /var/lib/postgresql (database state) onto separate ZFS datasets.
+     # Restore with services stopped and the matching PostgreSQL major version.
+      openFirewall = true;
+    };
     jellyfin = {
       enable = true;
       openFirewall = true;

@@ -56,6 +56,11 @@
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" "nofail" ];
     };
+  fileSystems."/var/lib/immich" = {
+    device = "/mercury/immich";
+    fsType = "none";
+    options = [ "bind" ];
+  };
 
   swapDevices = [ ];
 
