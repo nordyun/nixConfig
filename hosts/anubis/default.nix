@@ -90,10 +90,10 @@ in
     #   enable = true;
     #   openFirewall = true;
     # };
-    jellyfin = {
-      enable = true;
-      openFirewall = true;
-    };
+    # jellyfin = {
+    #   enable = true;
+    #   openFirewall = true;
+    # };
     nfs.server = {
       enable = true;
       # fixed rpc.statd port; for firewall
@@ -227,10 +227,10 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    jellyfin
-    jellyfin-web
-    jellyfin-ffmpeg
-    jellyfin-media-player
+    # jellyfin
+    # jellyfin-web
+    # jellyfin-ffmpeg
+    # jellyfin-media-player
     obsidian
     dive # look into docker image layers
     podman-tui # container status
