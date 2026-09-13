@@ -20,9 +20,7 @@
   myMonit.smartHealth.enable = true;
 
   myMonit.processes = {
-    jellyfin.matching = "jellyfin";
     mpd.matching = "mpd";
-    samba-smbd.matching = "smbd";
     tailscaled.matching = "tailscaled";
     snmpd.matching = "snmpd";
   };
