@@ -16,9 +16,7 @@
   # /mercury is the ZFS pool root backing photos/movies/music/tv/nfs/samba.
   myMonit.extraFilesystems = {
     persist = "/persist";
-    mercury = "/mercury";
   };
-  myMonit.zpools = [ "mercury" ];
   myMonit.smartHealth.enable = true;
 
   myMonit.processes = {
