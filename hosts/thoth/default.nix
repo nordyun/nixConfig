@@ -27,6 +27,8 @@ in
   time.timeZone = "America/New_York";
 
   networking.hostId = "c0b08ea5";
+  # Avoid Sata link sleep/wake timeouts affecting the "2M2101" drives
+  powerManagement.scsiLinkPolicy = "max_performance";
   boot.zfs.extraPools = [ "mercury" ];
   services.zfs.autoScrub = {
     enable = true;
