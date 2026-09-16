@@ -1,4 +1,7 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, myLib, ... }:
+let
+  unstable = myLib.mkUnstable pkgs;
+in
 {
   imports = [
     ../../modules/common/darwin-common.nix
@@ -24,6 +27,7 @@
     iina
     nixfmt
     jdk17
+    unstable.herdr
   ];
 
   homebrew.taps = [
@@ -45,6 +49,7 @@
   homebrew.casks = [
     "wallspace"
     "termius"
+    "mist"
   ];
 
   # casks moved to workstation.nix
