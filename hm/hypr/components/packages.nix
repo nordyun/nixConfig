@@ -6,8 +6,8 @@
     _1password-gui
     swaynotificationcenter
     # wayvnc
-    maestral
-    maestral-gui
+    # maestral
+    # maestral-gui
     waytrogen
     mpvpaper
     inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.default

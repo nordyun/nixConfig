@@ -6,8 +6,6 @@ in
   imports = [
     ./hardware-configuration.nix
     ./impermanence.nix
-    ./sanoid.nix
-    ./syncoid.nix
     ./systemdservices.nix
     ./monit.nix
     ./autologin.nix
@@ -17,7 +15,6 @@ in
     ./camillagui.nix
     ./camillaeq.nix
     ./n8n.nix
-    ./letta.nix
     ./tws.nix
     ../../modules/common
     ../../users/wash-desktop

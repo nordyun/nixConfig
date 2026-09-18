@@ -52,20 +52,6 @@ in
     };
   };
 
-  systemd.services.immich-server = {
-    after = [ "zfs-mount.service" ];
-    requires = [ "zfs-mount.service" ];
-    unitConfig = {
-      ConditionPathIsMountPoint = [
-      "/mercury/immich"
-    ];
-      RequiresMountsFor = [
-      "/mercury/immich"
-      "/var/lib/immich"
-    ];
-    };
-  };
-
   services = {
     immich = {
       enable = true;
@@ -74,9 +60,6 @@ in
       package = unstable.immich;
       port = 2283;
       host = "0.0.0.0";
-     # MIGRATION from anubis: restore /var/lib/immich (managed media/uploads)
-     # and /var/lib/postgresql (database state) onto separate ZFS datasets.
-     # Restore with services stopped and the matching PostgreSQL major version.
       openFirewall = true;
     };
     jellyfin = {
@@ -196,6 +179,7 @@ in
     dive # inspect docker/podman image layers
     podman-tui # container status
     docker-client
+    maestral
   ];
 
   networking.firewall.interfaces.${lanInterface} = {
