@@ -167,6 +167,24 @@ in
           "guest ok" = "no";
           "force user" = "wash";
         };
+        "test1" = {
+          "path" = "/mercury/testUploads1";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "no";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
+        "test2" = {
+          "path" = "/mercury/testUploads2";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "no";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
       };
     };
   };
