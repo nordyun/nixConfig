@@ -5,28 +5,28 @@
   #   - an `onedrive:` rclone remote configured for user wash
   #   - the pushover_{user,token} agenix secrets (declared below)
   #   - ~/bin/pushover.sh (provided by home-manager, hm/linuxbin)
-  systemd.timers.rcloneOnedrive = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*-*~01 22:00";
-      Persistent = true;
-      Unit = "rcloneOnedrive.service";
-    };
-  };
-  systemd.services.rcloneOnedrive = {
-    enable = true;
-    after = [ "network.target" ];
-    description = "Monthly photo backup to Onedrive";
-    path = [ "/run/current-system/sw" ];
-    serviceConfig = {
-      Type = "oneshot";
-      User = "wash";
-      Group = "users";
-    };
-    script = ''
-      ${./rcloneOnedrive.sh}
-    '';
-  };
+  # systemd.timers.rcloneOnedrive = {
+  #   wantedBy = [ "timers.target" ];
+  #   timerConfig = {
+  #     OnCalendar = "*-*~01 22:00";
+  #     Persistent = true;
+  #     Unit = "rcloneOnedrive.service";
+  #   };
+  # };
+  # systemd.services.rcloneOnedrive = {
+  #   enable = true;
+  #   after = [ "network.target" ];
+  #   description = "Monthly photo backup to Onedrive";
+  #   path = [ "/run/current-system/sw" ];
+  #   serviceConfig = {
+  #     Type = "oneshot";
+  #     User = "wash";
+  #     Group = "users";
+  #   };
+  #   script = ''
+  #     ${./rcloneOnedrive.sh}
+  #   '';
+  # };
   systemd.services.maestral = {
     enable = true;
     description = "Maestral Dropbox client";

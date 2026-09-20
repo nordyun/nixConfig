@@ -168,6 +168,15 @@ in
           "guest ok" = "no";
           "force user" = "wash";
         };
+        "photo-ingest" = {
+          "path" = "/srv/photo-ingest";
+          "valid users" = "wash";
+          "public" = "no";
+          "browseable" = "yes";
+          "read only" = "no";
+          "guest ok" = "no";
+          "force user" = "wash";
+        };
       };
     };
   };
