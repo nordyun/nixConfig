@@ -1,4 +1,9 @@
-{ inputs, pkgs, myLib, ... }:
+{
+  inputs,
+  pkgs,
+  myLib,
+  ...
+}:
 let
   unstable = myLib.mkUnstable pkgs;
 in
@@ -29,12 +34,8 @@ in
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
 
-  # NOTE
-  # ZFS LATEST COMPATIBLE no longer supported, standard nixos kernel **should** be fine
-  # PINNED 6.12 until 6.12 LTS is in Nixos (should be on 25.05)
-  # boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
+  boot.kernel.sysctl."net.ipv4.tcp_congestion_control" = "bbr";
 
-  # boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   environment.systemPackages = with pkgs; [
     git
     unstable.eza

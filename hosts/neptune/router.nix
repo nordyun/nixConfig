@@ -17,9 +17,8 @@
     "net.ipv6.conf.wan.accept_ra" = 2;
     "net.ipv6.conf.wan.autoconf" = 1;
 
-    # Better network performance
-    "net.core.default_qdisc" = "fq";
-    "net.ipv4.tcp_congestion_control" = "bbr";
+    # Better network performance.
+    # tcp_congestion_control = bbr now comes from modules/common/sys-default.nix.
 
     # QUIC recommendations testing
     "net.core.rmem_max" = 7500000;
