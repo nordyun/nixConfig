@@ -13,11 +13,11 @@ in
     ./systemdservices.nix
     ./photo-ingest.nix
     ./monit.nix
+    ./immich.nix
     ../../modules/snmpd.nix
     ./tailscale.nix
     ../../users/wash
     ../../modules/server
-    ../../modules/immich-oauth.nix
   ];
 
   networking = {
