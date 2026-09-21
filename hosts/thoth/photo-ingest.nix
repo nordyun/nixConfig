@@ -12,7 +12,7 @@ let
   ingest = pkgs.writeShellScript "photo-ingest-grady" ''
     set -euo pipefail
     # Photos
-    ${pkgs.rsync}/bin/rsync -av \
+    ${pkgs.rsync}/bin/rsync -av --chmod=D755,F644 \
     --remove-source-files \
     --exclude='.*' \
     --include='*/' \
@@ -24,7 +24,7 @@ let
     --exclude='*' \
     ${src}/ ${photoDest}/
     # Videos
-    ${pkgs.rsync}/bin/rsync -av \
+    ${pkgs.rsync}/bin/rsync -av --chmod=D755,F644 \
     --remove-source-files \
     --exclude='.*' \
     --include='*/' \
