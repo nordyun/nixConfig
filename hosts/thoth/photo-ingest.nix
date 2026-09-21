@@ -85,9 +85,9 @@ in
   systemd.services.photo-ingest-grady = {
     description = "Grady photos and videos to mercury";
     after = [ "zfs-mount.service" ];
-    requires = [ "zfs-mount.service " ];
+    requires = [ "zfs-mount.service" ];
     unitConfig.ConditionPathIsMountPoint = [
-      /srv/photo-ingest
+      "/srv/photo-ingest"
       photoDest
       videoDest
     ];
