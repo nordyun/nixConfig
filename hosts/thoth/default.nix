@@ -171,6 +171,8 @@ in
         };
         "photo-ingest" = {
           "path" = "/srv/photo-ingest";
+          "create mask" = "0644";
+          "directory mask" = "0755";
           "valid users" = "wash";
           "public" = "no";
           "browseable" = "yes";
