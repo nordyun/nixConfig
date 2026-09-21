@@ -1,6 +1,5 @@
-{ pkgs, myLib, ... }:
+{ pkgs, ... }:
 let
-  unstable = myLib.mkUnstable pkgs;
   lanInterface = "enp4s0";
 in
 {
@@ -54,15 +53,6 @@ in
   };
 
   services = {
-    immich = {
-      enable = true;
-      # mediaLocation = "/mercury/immich"; #can't do, bind mount due to immich bug
-      # Keep server and machine learning on the supported release from unstable.
-      package = unstable.immich;
-      port = 2283;
-      host = "0.0.0.0";
-      openFirewall = true;
-    };
     jellyfin = {
       enable = true;
       openFirewall = true;

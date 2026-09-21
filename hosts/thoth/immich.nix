@@ -1,9 +1,16 @@
-{ config, ... }:
+{ config, myLib, pkgs, ... }:
+let
+  unstable = myLib.mkUnstable pkgs;
+in
 {
-  age.secrets.immich_google_client_secret.file = ../secrets/immich_google_client_secret.age;
+  age.secrets.immich_google_client_secret.file = ../../secrets/immich_google_client_secret.age;
 
   services.immich = {
-    enabled = true;
+    enable = true;
+    package = unstable.immich;
+    port = 2283;
+    host = "0.0.0.0";
+    openFirewall = true;
     settings = {
       library = {
         scan = {
