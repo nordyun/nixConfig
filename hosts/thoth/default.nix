@@ -11,6 +11,7 @@ in
     ./sanoid.nix
     ./syncoid.nix
     ./systemdservices.nix
+    ./photo-ingest.nix
     ./monit.nix
     ../../modules/snmpd.nix
     ./tailscale.nix
