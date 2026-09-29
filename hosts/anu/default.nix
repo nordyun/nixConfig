@@ -50,6 +50,7 @@ in
     "wallspace"
     "termius"
     "mist"
+    "ghostty"
   ];
 
   # casks moved to workstation.nix
