@@ -1,13 +1,5 @@
 { pkgs, ... }:
-let
-  inherit (pkgs) stdenv;
-  osIcon = (if stdenv.isDarwin then "\\uf179" else "\\uf313");
-in
 {
-  imports = [
-    ./darwin.nix
-    ./linux.nix
-  ];
   programs.fish = {
     enable = true;
     plugins = [

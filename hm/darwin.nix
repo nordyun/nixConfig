@@ -1,16 +1,18 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
+let
+  androidHome = "${config.home.homeDirectory}/Library/Android/sdk";
+in
 {
   age.secrets = {
     pushover_token.file = ../secrets/pushover_token.age;
     pushover_user.file = ../secrets/pushover_user.age;
   };
-  home.sessionPath = [ "$HOME/.cargo/bin" ];
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-    PATH = "$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools";
-    ANDROID_HOME = "/Users/wash/Library/Android/sdk";
-  };
+  home.sessionPath = [
+    "${androidHome}/tools"
+    "${androidHome}/tools/bin"
+    "${androidHome}/platform-tools"
+  ];
+  home.sessionVariables.ANDROID_HOME = androidHome;
   home.packages = with pkgs; [
     mosh
     nmap

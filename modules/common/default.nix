@@ -7,6 +7,7 @@
 {
   imports = [
     ./sys-default.nix
+    ./shells.nix
     #    ./noexec.nix
     ./agenix.nix
     ../host-variables.nix

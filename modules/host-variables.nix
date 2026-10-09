@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 {
   options.hostVars = {
     primaryUser = lib.mkOption {
@@ -9,15 +14,13 @@
     homeDirectory = lib.mkOption {
       type = lib.types.str;
       default =
-        let prefix = if pkgs.stdenv.isDarwin then "/Users" else "/home";
-        in "${prefix}/${config.hostVars.primaryUser}";
+        let
+          prefix = if pkgs.stdenv.isDarwin then "/Users" else "/home";
+        in
+        "${prefix}/${config.hostVars.primaryUser}";
       description = "Home directory for the primary user (auto-computed from platform)";
     };
-    hyprStart = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Start hyprland";
-    };
+    hyprlandAutoStart = lib.mkEnableOption "starting Hyprland through UWSM on an interactive TTY1 login";
     extraMonitorSettings = lib.mkOption {
       type = lib.types.str;
       default = "";

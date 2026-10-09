@@ -36,7 +36,7 @@
     ];
     openssh.authorizedKeys.keyFiles = [ myLib.nordyunKeys ];
     hashedPasswordFile = config.age.secrets.washpw.path;
-    shell = pkgs.fish;
+    shell = pkgs.${config.shellPreferences.wash};
   };
 
   home-manager.extraSpecialArgs = { inherit inputs; };

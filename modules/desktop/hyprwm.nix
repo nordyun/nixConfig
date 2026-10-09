@@ -1,15 +1,8 @@
-{ config, ... }:
+{ ... }:
 {
   # Enable dconf for GTK applications (needed for apps like waytrogen)
 
-  hostVars.hyprStart = ''
-    # Auto-start Hyprland via uwsm on TTY1
-    if test (tty) = "/dev/tty1"
-      if uwsm check may-start
-        exec uwsm start ${config.programs.hyprland.package}/bin/start-hyprland
-      end
-    end
-  '';
+  hostVars.hyprlandAutoStart = true;
 
   programs = {
     dconf.enable = true;

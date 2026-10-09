@@ -1,9 +1,13 @@
-{ pkgs, myLib, config, ... }:
+{
+  pkgs,
+  myLib,
+  config,
+  ...
+}:
 let
   unstable = myLib.mkUnstable pkgs;
 in
 {
-  environment.shells = [ pkgs.fish ];
   environment.systemPackages = [ pkgs.jankyborders ];
 
   homebrew = {

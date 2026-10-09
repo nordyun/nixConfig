@@ -48,18 +48,12 @@ in
   ];
 
   programs = {
-    fish.enable = true;
     neovim = {
       enable = true;
       defaultEditor = true;
     };
     mosh.enable = true;
   };
-
-  environment.shells = with pkgs; [
-    fish
-    zsh
-  ];
 
   services.openssh = {
     enable = true;
@@ -83,7 +77,10 @@ in
     allowedTCPPorts = [ ];
     allowedUDPPorts = [ ];
     allowedUDPPortRanges = [
-      { from = 60000; to = 61000; }
+      {
+        from = 60000;
+        to = 61000;
+      }
     ];
   };
 

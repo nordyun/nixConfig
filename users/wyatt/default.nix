@@ -39,7 +39,7 @@
       ];
       openssh.authorizedKeys.keyFiles = [ myLib.nordyunKeys ];
       hashedPasswordFile = config.age.secrets.wyattpw.path;
-      shell = pkgs.fish;
+      shell = pkgs.${config.shellPreferences.wyatt};
       packages = with pkgs; [
         firefox
         tree

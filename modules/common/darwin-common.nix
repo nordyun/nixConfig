@@ -1,18 +1,23 @@
-{ pkgs, config, myLib, ... }:
+{
+  pkgs,
+  config,
+  myLib,
+  ...
+}:
 let
   unstable = myLib.mkUnstable pkgs;
 in
 {
-  imports = [ ../host-variables.nix ];
+  imports = [
+    ../host-variables.nix
+    ./shells.nix
+  ];
 
   programs.gnupg.agent.enable = true;
-  #  programs.zsh.enable = true;
-  #  environment.pathsToLink = [ "/share/zsh" ];
   nix.package = pkgs.nixVersions.stable;
   nix.settings.cores = 0; # use all cores
   nix.settings.max-jobs = 10; # use all cores
   environment.systemPath = [ "/opt/homebrew/bin" ];
-  programs.fish.enable = true;
   system.primaryUser = config.hostVars.primaryUser;
   system.defaults = {
     NSGlobalDomain.AppleShowAllExtensions = true;
