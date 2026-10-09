@@ -7,6 +7,7 @@
     ./hardware-configuration.nix
     ./networking.nix
     ./monitoring.nix
+    ./kuma.nix
   ];
 
   networking.hostName = "heimdall";
