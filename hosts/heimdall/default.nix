@@ -9,6 +9,7 @@
     ./monitoring.nix
     ./kuma.nix
     ./kuma-backup.nix
+    ./healthchecks.nix
   ];
 
   networking.hostName = "heimdall";

@@ -151,6 +151,8 @@ in
   "healthchecks_secret_key.age".publicKeys = [
     wash
     horus
+    heimdall
   ];
   "kuma_backup_ssh.age".publicKeys = [ wash thoth ];
+  "kuma_backup_healthchecks.age".publicKeys = [ wash thoth ];
 }

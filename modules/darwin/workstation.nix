@@ -24,7 +24,7 @@ in
       "kodi"
       "calibre"
       "kitty"
-      "wezterm"
+      "wezterm@nightly"
       "font-jetbrains-mono"
       "tailscale-app"
       "raycast"

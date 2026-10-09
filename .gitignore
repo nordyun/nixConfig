@@ -3,6 +3,8 @@ result
 
 hosts/heimdall/KUMA.md
 hosts/heimdall/PLAN.md
+hosts/heimdall/HEALTHCHECKS.md
+hosts/heimdall/KUMA-BACKUP.md
 docs/tailscale-heimdall.hujson
 docs/tailscale-heimdall.md
 docs/shells.md

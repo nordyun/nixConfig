@@ -37,8 +37,10 @@ Heimdall's SSH host key is pinned. The existing thoth-to-heimdall TCP 31225 gran
 already permits the network connection.
 
 Backup failure invokes thoth's existing Slack `#alerts` helper. The job does not
-send success notifications. Future Healthchecks integration can detect missed
-scheduled runs, including times when thoth cannot send a failure alert.
+send routine success notifications. The prepared offsite Healthchecks hook
+reports job start, verified success, and failure, and detects missing scheduled
+check-ins even when thoth cannot send an immediate failure alert. Activation is
+pending; see `HEALTHCHECKS.md` for the current deployment status.
 
 ## Deployment and validation status
 
@@ -56,8 +58,11 @@ with its notification association. The test paused monitors only in its disposab
 copy and used systemd `PrivateNetwork=yes` to prevent any external notifications.
 Production Kuma remained running.
 
-Thoth activation and the first archive in the dataset are pending. Thoth requires
-Wash's sudo password; activate the already-built configuration on thoth:
+Thoth activation is complete. Wash verified the service and timer, reported that
+the first pull completed in about one second, and confirmed the new archive in
+`/mercury/kuma-backup`. Kuma backup setup is complete.
+
+The initial activation used the already-built configuration on thoth:
 
 ```sh
 sudo nix-env --profile /nix/var/nix/profiles/system --set /nix/store/96nxv7fhwvkz09s4ifrxcwjqq1z90l5l-nixos-system-thoth-26.05.20261006.b253099
@@ -65,7 +70,7 @@ sudo /nix/store/96nxv7fhwvkz09s4ifrxcwjqq1z90l5l-nixos-system-thoth-26.05.202610
 sudo systemctl start kuma-backup
 ```
 
-Then inspect:
+For routine inspection:
 
 ```sh
 systemctl list-timers kuma-backup.timer
