@@ -6,11 +6,5 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   boot.initrd.availableKernelModules = [ "virtio_pci" "virtio_scsi" "sd_mod" ];
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = false;
-    devices = [ "/dev/sda" ];
-    configurationLimit = 5;
-  };
   swapDevices = [ { device = "/swapfile"; size = 1024; } ];
 }
