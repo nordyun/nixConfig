@@ -11,15 +11,6 @@ in
     owner = "healthchecks";
   };
 
-  # --- Uptime Kuma :3001 -> serve :10443 ---
-  services.uptime-kuma = {
-    enable = true;
-    settings = {
-      HOST = "127.0.0.1";
-      PORT = "3001";
-    };
-  };
-
   # --- healthchecks :8000 -> serve :11443 ---
   services.healthchecks = {
     enable = true;
@@ -45,7 +36,7 @@ in
         "Monitoring" = [
           { "M/Monit" = { href = "${base}:8443"; description = "hosts + processes (white-box)"; }; }
           { "LibreNMS" = { href = "${base}:9443"; description = "SNMP: switch + hosts"; }; }
-          { "Uptime Kuma" = { href = "${base}:10443"; description = "black-box checks + status page"; }; }
+          { "Uptime Kuma" = { href = "https://heimdall.taila3fef.ts.net:10443"; description = "offsite availability checks"; }; }
           { "Healthchecks" = { href = "${base}:11443"; description = "backup / cron dead-man switch"; }; }
         ];
       }
@@ -54,14 +45,12 @@ in
 
   myTailscaleServe.mounts = {
     "443" = "http://127.0.0.1:8082";
-    "10443" = "http://127.0.0.1:3001";
     "11443" = "http://127.0.0.1:8000";
   };
 
   # process-match patterns are best guesses; verify with `monit procmatch "<pat>"`
   # on horus after the first deploy and tighten if needed.
   myMonit.processes = {
-    uptime-kuma.matching = "uptime-kuma";
     homepage-dashboard.matching = "next-server";
     healthchecks = {
       matching = "hc.wsgi";

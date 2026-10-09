@@ -28,7 +28,7 @@
       if failed
         port 10443
         protocol https
-        request "/"
+        request "/dashboard"
         status = 200
         with timeout 15 seconds
       for 3 cycles
