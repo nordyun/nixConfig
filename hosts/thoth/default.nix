@@ -11,6 +11,7 @@ in
     ./syncoid.nix
     ./systemdservices.nix
     ./photo-ingest.nix
+    ./kuma-backup.nix
     ./monit.nix
     ./immich.nix
     ../../modules/snmpd.nix

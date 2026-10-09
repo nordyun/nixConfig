@@ -152,4 +152,5 @@ in
     wash
     horus
   ];
+  "kuma_backup_ssh.age".publicKeys = [ wash thoth ];
 }
