@@ -14,6 +14,7 @@ in
   ];
   home.sessionVariables.ANDROID_HOME = androidHome;
   home.packages = with pkgs; [
+    (callPackage ../pkgs/rea { })
     mosh
     nmap
     rclone

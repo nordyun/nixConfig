@@ -155,4 +155,5 @@ in
   ];
   "kuma_backup_ssh.age".publicKeys = [ wash thoth ];
   "kuma_backup_healthchecks.age".publicKeys = [ wash thoth ];
+  "healthchecks_backup_ssh.age".publicKeys = [ wash thoth ];
 }

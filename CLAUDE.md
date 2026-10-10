@@ -14,13 +14,13 @@ This is a NixOS/nix-darwin flake configuration managing multiple hosts across Li
 ```bash
 darwin-rebuild switch --flake .#<hostname>
 ```
-Available darwin hosts: `io`, `saturn`
+Available darwin hosts: `anu`
 
 **For NixOS hosts:**
 ```bash
 sudo nixos-rebuild switch --flake .#<hostname>
 ```
-Available NixOS hosts: `anubis`, `neptune`, `zelda`, `nixmacVM`
+Available NixOS hosts: `anubis`, `thoth`, `neptune`, `horus`, `heimdall`
 
 ### Testing Without Activation
 ```bash
@@ -30,6 +30,8 @@ darwin-rebuild build --flake .#<hostname>
 # NixOS
 sudo nixos-rebuild build --flake .#<hostname>
 ```
+
+Flakes only see git-tracked files: new files must be `git add`ed (or `git add -N`) before a build will pick them up.
 
 ### Updating Dependencies
 ```bash
@@ -52,18 +54,22 @@ agenix -r
 - **`flake.nix`**: Main flake definition with inputs and output configurations
 - **`hosts/`**: Per-host configurations (both NixOS and darwin)
   - Each host has its own directory with `default.nix` and host-specific modules
-- **`modules/`**: Reusable NixOS configuration modules
-  - `common/`: Shared configuration for all NixOS systems
+- **`modules/`**: Reusable configuration modules
+  - `common/`: Shared configuration (`sys-default.nix` for NixOS, `darwin-common.nix` for macOS)
+  - `darwin/`: macOS workstation config (`workstation.nix`: window manager, sketchybar)
   - `desktop/`: Desktop environment configurations (bspwm, hyprwm, wayland)
   - `gnome/`: GNOME-specific configurations
   - `server/`: Server-specific configurations
+  - Top-level shared service modules: `monit.nix`, `nut.nix`, `snmpd.nix`, `notify.nix`, `tailscale-serve.nix`
 - **`hm/`**: Home Manager configurations
   - `common/`: Shared home-manager configs (CLI tools, nvim, fish)
   - `darwin.nix`: macOS-specific home-manager config
-  - Desktop environment configs (bspwm, hypr, waybar, etc.)
+  - Desktop environment configs (hypr, waybar, etc.)
 - **`users/`**: User-specific configurations
   - Separate directories for each user and platform combination
   - Format: `<username>` (Linux) or `darwin-<username>` (macOS)
+- **`pkgs/`**: Local package derivations not in nixpkgs (see "Custom Packages")
+- **`lib/`**: Shared helpers exposed as `myLib` (`mkUnstable`, `fetchGithubKeys`, `nordyunKeys`)
 - **`secrets/`**: Encrypted secrets managed by agenix
   - `secrets.nix`: Public key mappings for secret encryption
 
@@ -81,17 +87,23 @@ agenix -r
 4. Additional feature modules (desktop, server, etc.) imported as needed
 
 **Special Args Pattern:**
-All configurations receive `{ inherit inputs outputs; }` as `specialArgs`, making flake inputs available throughout the configuration tree.
+All configurations receive `{ inherit inputs outputs myLib; }` as `specialArgs`, making flake inputs and the helpers in `lib/` available throughout the configuration tree.
 
 **Unstable Packages:**
-Many configurations use a pattern to access nixpkgs-unstable:
+Use the `myLib.mkUnstable` helper to access nixpkgs-unstable:
 ```nix
+{ pkgs, myLib, ... }:
 let
-  unstable = import inputs.nixpkgs-unstable {
-    system = pkgs.stdenv.hostPlatform.system;
-    config.allowUnfree = true;
-  };
+  unstable = myLib.mkUnstable pkgs;
 in
+```
+
+**Custom Packages:**
+Derivations for software not in nixpkgs live in `pkgs/` (a single `<name>.nix`, or `<name>/default.nix` when extra files like a lockfile are needed). They are not exported as flake outputs or via an overlay; the consuming module instantiates them directly:
+```nix
+mmonit = pkgs.callPackage ../../pkgs/mmonit { };
+# or inline in a package list:
+home.packages = [ (pkgs.callPackage ../pkgs/rea { }) ];
 ```
 
 **Secret Management:**
@@ -102,30 +114,33 @@ in
 - Home-manager: uses `inputs.agenix.homeManagerModules.default`
 
 **SSH Key Fetching:**
-User configurations use a common pattern to fetch SSH keys from GitHub:
-```nix
-fetchKeys = username:
-  (builtins.fetchurl {
-    url = "https://github.com/${username}.keys";
-    sha256 = "<hash>";
-  });
-```
+Use the helpers in `lib/`: `myLib.nordyunKeys` for the standard user keys, or `myLib.fetchGithubKeys "<username>" "<sha256>"` for others.
 
 ### Host-Specific Notes
 
-**io (macOS):**
-- Primary macOS workstation with yabai (tiling window manager) + skhd + sketchybar
+**anu (macOS):**
+- Primary macOS workstation (aarch64-darwin, Determinate Nix so `nix.enable = false`)
+- Window manager and sketchybar configured in `modules/darwin/workstation.nix` (aerospace currently installed via homebrew, configured in `~/.aerospace.toml`)
 - Uses homebrew for casks (fonts, GUI apps)
-- Custom yabai rules for app-to-space assignments
 
 **anubis (NixOS):**
-- Media/storage server with Plex, Jellyfin, NFS, and Samba
-- Uses ZFS pool "mercury" for storage
+- Desktop/audio machine: CamillaDSP, upmpdcli, Resilio, n8n
 - Impermanence setup for stateless configuration
-- Sanoid/Syncoid for ZFS snapshot management
+- Shedding non-desktop jobs to thoth
+
+**thoth (NixOS):**
+- Storage/media server: ZFS pool "mercury", Jellyfin (with hardware acceleration), Immich, NFS, Samba
+- Sanoid/Syncoid for ZFS snapshot management; receives backups pulled from heimdall
+- Impermanence setup
 
 **neptune (NixOS):**
-- Appears to be a router/network appliance (has `router.nix`)
+- Router/network appliance (`router.nix`, unbound DNS)
+
+**horus (NixOS):**
+- Homelab observability box (2012 Mac mini, headless): M/Monit, NUT, LibreNMS
+
+**heimdall (NixOS):**
+- OVH VPS (disko-provisioned): Uptime Kuma, healthchecks, external monitoring. See `hosts/heimdall/README.md`
 
 ### Configuration Files to Check
 
@@ -142,11 +157,11 @@ When modifying configurations:
 - Darwin: Add to `environment.systemPackages` in host config or darwin-common
 
 **Adding a New Package to User Environment:**
-Add to `hm/common/cli.nix` in `home.packages`
+Add to `hm/common/cli.nix` in `home.packages` (all platforms), or `hm/darwin.nix` for macOS only
 
 **Modifying Window Manager on macOS:**
-Edit `hosts/io/default.nix` - yabai config, skhd keybindings, sketchybar settings
+Edit `modules/darwin/workstation.nix`
 
 **ZFS Management:**
-- Check `hosts/anubis/sanoid.nix` and `hosts/anubis/syncoid.nix` for backup configurations
+- Check `hosts/thoth/sanoid.nix` and `hosts/thoth/syncoid.nix` for backup configurations
 - ZFS pools are defined in host-specific configs with `boot.zfs.extraPools`
